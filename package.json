@@ -9,9 +9,9 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "npx tsc --noEmit && npx vite build",
-    "build:prod": "npx vite build",
-    "build:vercel": "npx vite build",
+    "build": "vite build",
+    "build:prod": "vite build",
+    "build:vercel": "vite build",
     "type-check": "npx tsc --noEmit",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
