@@ -108,3 +108,38 @@ The application uses pure CSS with:
 ## License
 
 This project is open source and available under the MIT License.
+
+## 🚀 Deployment
+
+This project is ready to deploy on various platforms. Here are the supported deployment options:
+
+### Vercel (Recommended)
+1. Connect your GitHub repository to [Vercel](https://vercel.com)
+2. Vercel will automatically detect the Vite framework
+3. Deploy with default settings - the `vercel.json` file will handle configuration
+
+### Netlify
+1. Connect your GitHub repository to [Netlify](https://netlify.com)
+2. The `netlify.toml` file will configure the build settings automatically
+3. Build command: `npm run build`
+4. Publish directory: `dist`
+
+### GitHub Pages
+1. Install the gh-pages package: `npm install --save-dev gh-pages`
+2. Add to package.json scripts: `"deploy": "gh-pages -d dist"`
+3. Run: `npm run build && npm run deploy`
+
+### Manual Deployment
+1. Run `npm run build` to create the production build
+2. Upload the contents of the `dist` folder to your web server
+3. Configure your server to serve `index.html` for all routes (SPA routing)
+
+### Build Commands
+- `npm run build` - Full build with TypeScript checking
+- `npm run build:prod` - Production build without TypeScript checking (faster)
+- `npm run type-check` - Type checking only
+- `npm run preview` - Preview the production build locally
+
+### Environment Requirements
+- Node.js 16.0.0 or higher
+- npm 8.0.0 or higher
