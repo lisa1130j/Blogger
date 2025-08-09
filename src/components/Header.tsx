@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
-import { PenTool, Home } from 'lucide-react'
+import { PenTool, Home, ShoppingBag } from 'lucide-react'
+import { features } from '../config/features'
 
 const Header = () => {
   return (
@@ -24,6 +25,14 @@ const Header = () => {
                 Create Post
               </Link>
             </li>
+            {features.enableProducts && (
+              <li>
+                <Link to="/products">
+                  <ShoppingBag size={18} />
+                  Products
+                </Link>
+              </li>
+            )}
           </ul>
         </nav>
       </div>
