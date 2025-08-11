@@ -7,6 +7,8 @@ import CreatePost from './components/CreatePost'
 import Products from './components/Products'
 import { BlogPostType } from './types/BlogPost'
 import { features } from './config/features'
+import Home from './pages/Home'
+import Post from './pages/Post'
 
 const initialPosts: BlogPostType[] = []
 
@@ -27,10 +29,10 @@ function App() {
       <div className="App">
         <Header />
         <main>
-          <div className="container">
-            <Routes>
-              <Route path="/" element={<BlogList posts={posts} />} />
-              <Route path="/post/:id" element={<BlogPost posts={posts} />} />
+          <div className="container"> 
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/:slug" element={<Post />} />
               <Route path="/create" element={<CreatePost onAddPost={addPost} />} />
               {features.enableProducts && (
                 <Route path="/products" element={<Products />} />

@@ -1,6 +1,8 @@
+import React, { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { BlogPostType } from '../types/BlogPost'
-import { ArrowLeft, Calendar, User, Clock, Tag } from 'lucide-react'
+import { ArrowLeft, Calendar, Clock } from 'lucide-react'
+import { getPostBySlug } from '../utils/markdown'
 
 // Calculate reading time
 const calculateReadingTime = (content: string): number => {
@@ -9,13 +11,19 @@ const calculateReadingTime = (content: string): number => {
   return Math.ceil(words / wordsPerMinute);
 }
 
-interface BlogPostProps {
-  posts: BlogPostType[]
-}
+const BlogPost: React.FC = () => {
+  const { slug } = useParams<{ slug: string }>()
+  const [post, setPost] = useState<BlogPostType | null>(null)
 
-const BlogPost = ({ posts }: BlogPostProps) => {
-  const { id } = useParams<{ id: string }>()
-  const post = posts.find(p => p.id === id)
+  useEffect(() => {
+    const loadPost = async () => {
+      if (slug) {
+        const loadedPost = await getPostBySlug(slug)
+        setPost(loadedPost)
+      }
+    }
+    loadPost()
+  }, [slug])
 
   if (!post) {
     return (
@@ -31,6 +39,21 @@ const BlogPost = ({ posts }: BlogPostProps) => {
       </div>
     )
   }
+  
+  useEffect(() => {
+  if (!post?.html) return;
+  const container = document.querySelector('.blog-post-content') as HTMLElement | null;
+  if (!container) return;
+
+  container.querySelectorAll('a').forEach((a) => {
+    a.setAttribute('target', '_blank');
+    a.setAttribute('rel', 'noopener noreferrer');
+    (a as HTMLAnchorElement).style.pointerEvents = 'auto';
+    (a as HTMLAnchorElement).style.textDecoration = 'underline';
+    (a as HTMLAnchorElement).style.cursor = 'pointer';
+  });
+}, [post?.html]);
+
 
   return (
     <div>
@@ -45,10 +68,6 @@ const BlogPost = ({ posts }: BlogPostProps) => {
         <div className="blog-post-meta">
           <div className="meta-group">
             <span className="meta-item">
-              <User size={16} />
-              {post.author}
-            </span>
-            <span className="meta-item">
               <Calendar size={16} />
               {post.date.toLocaleDateString('en-US', { 
                 year: 'numeric', 
@@ -61,18 +80,27 @@ const BlogPost = ({ posts }: BlogPostProps) => {
               {calculateReadingTime(post.content)} min read
             </span>
           </div>
-          <div className="meta-tags">
-            <Tag size={16} />
-            <span className="tag">Technology</span>
-            <span className="tag">Web Development</span>
-          </div>
         </div>
         
-        <div className="blog-post-content">
-          {post.content.split('\n').map((paragraph, index) => (
-            <p key={index}>{paragraph}</p>
-          ))}
-        </div>
+        {post.cover && (
+          <img 
+            src={post.cover} 
+            alt={post.title}
+            className="blog-post-cover"
+            style={{
+              width: '100%',
+              height: '300px',
+              objectFit: 'cover',
+              borderRadius: '8px',
+              marginBottom: '2rem'
+            }}
+          />
+        )}
+        
+        <div 
+          className="blog-post-content markdown-content"
+          dangerouslySetInnerHTML={{ __html: post.html || '' }}
+        />
       </article>
     </div>
   )

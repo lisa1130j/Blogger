@@ -9,7 +9,7 @@ const Header = () => {
         <nav className="nav">
           <h1>
             <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-              📝 Blogger
+              That Labubu Life
             </Link>
           </h1>
           <ul className="nav-links">
@@ -19,12 +19,14 @@ const Header = () => {
                 Home
               </Link>
             </li>
-            <li>
-              <Link to="/create">
-                <PenTool size={18} />
-                Create Post
-              </Link>
-            </li>
+            {features.enableCreatePost && (
+              <li>
+                <Link to="/create">
+                  <PenTool size={18} />
+                  Create Post
+                </Link>
+              </li>
+            )}
             {features.enableProducts && (
               <li>
                 <Link to="/products">

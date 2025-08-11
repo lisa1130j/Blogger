@@ -1,7 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { BlogPostType } from '../types/BlogPost'
-import { Calendar, User, ArrowRight, PenTool, Clock, Tag } from 'lucide-react'
+import { Calendar, ArrowRight, PenTool, Clock } from 'lucide-react'
+import { getAllPosts } from '../utils/markdown'
 
 // Calculate reading time
 const calculateReadingTime = (content: string): number => {
@@ -10,11 +11,16 @@ const calculateReadingTime = (content: string): number => {
   return Math.ceil(words / wordsPerMinute);
 }
 
-interface BlogListProps {
-  posts: BlogPostType[]
-}
+const BlogList: React.FC = () => {
+  const [posts, setPosts] = React.useState<BlogPostType[]>([])
 
-const BlogList = ({ posts }: BlogListProps) => {
+  React.useEffect(() => {
+    const loadPosts = async () => {
+      const posts = await getAllPosts()
+      setPosts(posts)
+    }
+    loadPosts()
+  }, [])
   return (
     <div className="grid" style={{ 
       display: 'grid', 
@@ -41,43 +47,48 @@ const BlogList = ({ posts }: BlogListProps) => {
         <div>
           <div className="ad-container">Advertisement</div>
           {posts.map((post, index) => (
-            <React.Fragment key={post.id}>
+            <React.Fragment key={post.slug}>
               <article className="blog-post">
               <h2>
-                <Link to={`/post/${post.id}`}>
+                <Link to={`/post/${post.slug}`}>
                   {post.title}
                 </Link>
               </h2>
               
               <div className="blog-post-meta">
-                <div className="meta-group">
-                  <span className="meta-item">
-                    <User size={14} />
-                    {post.author}
-                  </span>
-                  <span className="meta-item">
-                    <Calendar size={14} />
-                    {post.date.toLocaleDateString('en-US', { 
-                      year: 'numeric', 
-                      month: 'long', 
-                      day: 'numeric' 
-                    })}
-                  </span>
-                  <span className="meta-item">
-                    <Clock size={14} />
-                    {calculateReadingTime(post.content)} min read
-                  </span>
-                </div>
-                <div className="meta-tags">
-                  <Tag size={14} />
-                  <span className="tag">Technology</span>
-                  <span className="tag">Web Development</span>
-                </div>
+              <div className="meta-group">
+                <span className="meta-item">
+                  <Calendar size={14} />
+                  {post.date.toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                  })}
+                </span>
+                <span className="meta-item">
+                  <Clock size={14} />
+                  {calculateReadingTime(post.content)} min read
+                </span>
+              </div>
               </div>
               
+              {post.cover && (
+                <img 
+                  src={post.cover} 
+                  alt={post.title}
+                  className="blog-post-cover"
+                  style={{
+                    width: '100%',
+                    height: '200px',
+                    objectFit: 'cover',
+                    borderRadius: '8px',
+                    marginBottom: '1rem'
+                  }}
+                />
+              )}
               <div className="blog-post-content">
-                <p>{post.excerpt}</p>
-                <Link to={`/post/${post.id}`} className="btn btn-secondary">
+                <p>{post.description}</p>
+                <Link to={`/post/${post.slug}`} className="btn btn-secondary">
                   Read more
                   <ArrowRight size={16} />
                 </Link>
