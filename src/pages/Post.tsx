@@ -1,8 +1,7 @@
 import React from "react";
-import { useParams, Link } from "react-router-dom";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
+import { useParams } from "react-router-dom";
 import YAML from "yaml";
+import BlogPost from "../components/BlogPost";
 
 const rawPosts = import.meta.glob("../posts/*.md", { as: "raw", eager: true }) as Record<string, string>;
 
@@ -42,31 +41,12 @@ export default function Post() {
 
   return (
     <main style={{ maxWidth: 760, margin: "40px auto", padding: "0 16px" }}>
-      <Link to="/" className="back-button">
-        ← Back to posts
-      </Link>
-      <div className="blog-post">
-        {frontmatter.title && <h1>{frontmatter.title}</h1>}
-        {frontmatter.date && <small style={{ opacity: 0.7 }}>{frontmatter.date}</small>}
-        <div style={{ marginTop: 24 }}>
-          <ReactMarkdown
-  remarkPlugins={[remarkGfm]}
-  components={{
-    a: ({ node, ...props }) => (
-      <a
-        {...props}
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{ textDecoration: "underline", cursor: "pointer" }}
+      <BlogPost
+        title={frontmatter.title || "Untitled Post"}
+        content={content}
+        date={frontmatter.date || new Date().toLocaleDateString()}
+        slug={slug || ""}
       />
-    ),
-  }}
->
-  {content}
-</ReactMarkdown>
-
-        </div>
-      </div>
     </main>
   );
 }

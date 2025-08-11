@@ -142,51 +142,8 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background: linear-gradient(135deg, 
-    rgba(255, 184, 108, 0.08),
-    rgba(255, 107, 156, 0.08),
-    rgba(108, 223, 255, 0.08),
-    rgba(156, 136, 255, 0.08)
-  );
-  background-size: 400% 400%;
-  animation: gradientBG 15s ease infinite;
+  background: var(--color-background);
   position: relative;
-}
-
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(
-    circle at top right,
-    rgba(255, 107, 156, 0.1) 0%,
-    transparent 50%
-  );
-  pointer-events: none;
-}
-
-body::after {
-  content: '';
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(
-    circle at bottom left,
-    rgba(108, 223, 255, 0.1) 0%,
-    transparent 50%
-  );
-  pointer-events: none;
-}
-
-@keyframes gradientBG {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
 }
 
 #root {
@@ -539,86 +496,35 @@ main {
 
 /* Blog Post Page */
 .blog-post {
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-xl);
-  box-shadow: 0 4px 20px rgba(255, 107, 156, 0.05);
+  background: var(--color-background);
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius-md);
   padding: var(--spacing-2xl);
   margin-bottom: var(--spacing-2xl);
-  transition: all var(--transition-normal);
-  position: relative;
-  overflow: hidden;
-  backdrop-filter: blur(10px);
-  animation: borderGlow 4s ease-in-out infinite;
-}
-
-@keyframes borderGlow {
-  0%, 100% { border-color: var(--color-primary); }
-  25% { border-color: var(--color-secondary); }
-  50% { border-color: var(--color-accent); }
-  75% { border-color: var(--color-accent-2); }
 }
 
 @media (prefers-color-scheme: dark) {
   .blog-post {
-    background: rgba(31, 29, 43, 0.7);
+    background: var(--color-surface);
+    border-color: var(--color-primary);
   }
 }
 
-.blog-post::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, 
-    rgba(255, 107, 156, 0.15),
-    rgba(108, 223, 255, 0.15),
-    rgba(156, 136, 255, 0.15),
-    rgba(124, 77, 255, 0.15)
-  );
-  opacity: 0;
-  transition: all var(--transition-normal);
-  border-radius: var(--radius-xl);
-  animation: gradientMove 8s ease-in-out infinite;
-}
-
-@keyframes gradientMove {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-.blog-post:hover {
-  box-shadow: 0 8px 30px rgba(255, 107, 156, 0.1);
-  transform: translateY(-3px) scale(1.01);
-}
-
-.blog-post:hover::before {
-  opacity: 1;
-}
-
 .blog-post h1 {
-  color: var(--color-text-primary);
+  color: var(--color-primary);
   margin-bottom: var(--spacing-lg);
   font-weight: 700;
 }
 
 .blog-post h2 {
-  color: var(--color-text-primary);
+  color: var(--color-secondary);
   margin-bottom: var(--spacing-md);
   font-weight: 600;
 }
 
 .blog-post h2 a {
   color: inherit;
-  text-decoration: none;
-  transition: color var(--transition-fast);
-}
-
-.blog-post h2 a:hover {
-  color: var(--color-primary);
+  text-decoration: underline;
 }
 
 .blog-post-meta {
@@ -627,12 +533,12 @@ main {
   justify-content: space-between;
   align-items: center;
   gap: var(--spacing-lg);
-  color: var(--color-text-muted);
+  color: var(--color-accent);
   font-size: var(--font-size-sm);
   font-weight: 500;
   margin-bottom: var(--spacing-lg);
   padding-bottom: var(--spacing-md);
-  border-bottom: 1px solid var(--color-border-light);
+  border-bottom: 2px solid var(--color-primary-light);
 }
 
 .meta-group {
@@ -709,37 +615,25 @@ main {
 }
 
 .blog-post-content {
-  color: var(--color-text-secondary);
+  color: var(--color-text-primary);
   line-height: 1.7;
+  background-color: var(--color-primary-light);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-md);
 }
 
 .blog-post-content a {
   color: var(--color-primary);
-  text-decoration: none;
+  text-decoration: underline;
   font-weight: 600;
-  transition: color var(--transition-fast);
-  border-bottom: 2px solid transparent;
 }
 
 .blog-post-content a:hover {
-  color: var(--color-accent-2);
-  border-bottom-color: var(--color-accent-2);
+  color: var(--color-accent);
 }
 
 .blog-post-content p {
   margin-bottom: var(--spacing-lg);
-}
-
-.blog-post-content a {
-  color: var(--color-primary);
-  font-weight: 600;
-  text-decoration: none;
-  border-bottom: 1px solid transparent;
-  transition: border-color var(--transition-fast);
-}
-
-.blog-post-content a:hover {
-  border-bottom-color: var(--color-primary);
 }
 
 /* Page Headers */
@@ -1074,29 +968,101 @@ main {
 .markdown-content a {
   text-decoration: underline;
   cursor: pointer;
-  pointer-events: auto;
-  position: relative;
-  z-index: 2;
 }
 
-/* Ensure no pseudo-element overlays block clicks */
-.blog-post::before,
-.blog-post::after,
-.markdown-content::before,
-.markdown-content::after {
-  content: none !important;
+/* Social Share Component */
+.social-share {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--spacing-2xl);
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--color-border);
 }
 
-/* Keep markdown above accidental low z-index layers */
-.markdown-content {
-  position: relative;
-  z-index: 1;
+.like-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  color: var(--color-text-secondary);
+  transition: all var(--transition-normal);
 }
 
-/* Make sure nothing globally disables pointer events inside the post */
-.blog-post,
-.blog-post * {
-  pointer-events: auto;
+.like-button:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.like-button.liked {
+  background: var(--color-primary-light);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.like-button.liked .heart-icon {
+  fill: var(--color-primary);
+}
+
+.like-button .heart-icon {
+  transition: transform var(--transition-normal);
+}
+
+.like-button:hover .heart-icon {
+  transform: scale(1.2);
+}
+
+.like-count {
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+}
+
+.share-buttons {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.share-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  color: var(--color-text-secondary);
+  transition: all var(--transition-normal);
+}
+
+.share-button:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+
+.copy-success {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+@media (max-width: 480px) {
+  .social-share {
+    flex-direction: column;
+    gap: var(--spacing-lg);
+  }
+  
+  .share-buttons {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 }

@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { BlogPostType } from '../types/BlogPost'
 import { ArrowLeft, Calendar, Clock } from 'lucide-react'
-import { getPostBySlug } from '../utils/markdown'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+import SocialShare from './SocialShare'
 
 // Calculate reading time
 const calculateReadingTime = (content: string): number => {
@@ -11,95 +13,87 @@ const calculateReadingTime = (content: string): number => {
   return Math.ceil(words / wordsPerMinute);
 }
 
-const BlogPost: React.FC = () => {
-  const { slug } = useParams<{ slug: string }>()
-  const [post, setPost] = useState<BlogPostType | null>(null)
+interface BlogPostProps {
+  title: string
+  content: string
+  date: string
+  slug: string
+}
+
+const BlogPost: React.FC<BlogPostProps> = ({ title, content, date, slug }) => {
+  const [likes, setLikes] = useState(0)
+  const [isLiked, setIsLiked] = useState(false)
 
   useEffect(() => {
-    const loadPost = async () => {
-      if (slug) {
-        const loadedPost = await getPostBySlug(slug)
-        setPost(loadedPost)
-      }
+    // Load likes from localStorage
+    const storedLikes = localStorage.getItem(`blog-likes-${slug}`)
+    const userLiked = localStorage.getItem(`blog-liked-${slug}`)
+    if (storedLikes) {
+      setLikes(parseInt(storedLikes))
     }
-    loadPost()
+    if (userLiked) {
+      setIsLiked(true)
+    }
   }, [slug])
 
-  if (!post) {
-    return (
-      <div>
-        <div className="empty-state">
-          <h3>Post Not Found</h3>
-          <p>The blog post you're looking for doesn't exist.</p>
-          <Link to="/" className="btn btn-primary">
-            <ArrowLeft size={18} />
-            Back to Home
-          </Link>
-        </div>
-      </div>
-    )
+  const handleLike = () => {
+    const newLikeState = !isLiked
+    const newLikes = newLikeState ? likes + 1 : likes - 1
+    
+    setIsLiked(newLikeState)
+    setLikes(newLikes)
+    
+    localStorage.setItem(`blog-likes-${slug}`, newLikes.toString())
+    localStorage.setItem(`blog-liked-${slug}`, newLikeState ? 'true' : '')
   }
   
-  useEffect(() => {
-  if (!post?.html) return;
-  const container = document.querySelector('.blog-post-content') as HTMLElement | null;
-  if (!container) return;
-
-  container.querySelectorAll('a').forEach((a) => {
-    a.setAttribute('target', '_blank');
-    a.setAttribute('rel', 'noopener noreferrer');
-    (a as HTMLAnchorElement).style.pointerEvents = 'auto';
-    (a as HTMLAnchorElement).style.textDecoration = 'underline';
-    (a as HTMLAnchorElement).style.cursor = 'pointer';
-  });
-}, [post?.html]);
-
-
   return (
     <div>
-      <button className="back-button" onClick={() => window.history.back()}>
+      <Link to="/" className="back-button">
         <ArrowLeft size={18} />
         Back to Posts
-      </button>
+      </Link>
       
       <article className="blog-post">
-        <h1>{post.title}</h1>
+        <h1>{title}</h1>
         
         <div className="blog-post-meta">
           <div className="meta-group">
             <span className="meta-item">
               <Calendar size={16} />
-              {post.date.toLocaleDateString('en-US', { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-              })}
+              {date}
             </span>
             <span className="meta-item">
               <Clock size={16} />
-              {calculateReadingTime(post.content)} min read
+              {calculateReadingTime(content)} min read
             </span>
           </div>
         </div>
         
-        {post.cover && (
-          <img 
-            src={post.cover} 
-            alt={post.title}
-            className="blog-post-cover"
-            style={{
-              width: '100%',
-              height: '300px',
-              objectFit: 'cover',
-              borderRadius: '8px',
-              marginBottom: '2rem'
+        <div className="blog-post-content markdown-content">
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            components={{
+              a: ({ node, ...props }) => (
+                <a
+                  {...props}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ textDecoration: "underline", cursor: "pointer" }}
+                />
+              ),
             }}
-          />
-        )}
+          >
+            {content}
+          </ReactMarkdown>
+        </div>
         
-        <div 
-          className="blog-post-content markdown-content"
-          dangerouslySetInnerHTML={{ __html: post.html || '' }}
+        <SocialShare
+          title={title}
+          url={window.location.href}
+          onLike={handleLike}
+          likes={likes}
+          isLiked={isLiked}
         />
       </article>
     </div>
