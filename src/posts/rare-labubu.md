@@ -1,6 +1,6 @@
 ---
 title: "Rare Labubu Figures Every Collector Wants"
-date: "2025-08-10"
+date: "2025-07-27"
 description: "A look at the most sought-after Labubu collectibles in the Pop Mart universe."
 ---
 

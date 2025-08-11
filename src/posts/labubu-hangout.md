@@ -1,7 +1,7 @@
 ---
 title: "Where to Take Your Labubus: Fun Spots, Photo Ideas & Display Tips"
 description: Creative places to bring your Labubus for photos, vibes, and safe display.
-date: 2025-08-11
+date: 2025-08-10
 tags: [labubu, popmart, collecting, photography, display]
 cover: /images/labubu-outings-cover.jpg
 ---

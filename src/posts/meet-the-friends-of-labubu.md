@@ -1,7 +1,7 @@
 ---
 title: "Meet the Friends of Labubu: A Guide to Kasing Lung’s Whimsical Characters"
 description: Discover the quirky cast of characters that share Labubu’s magical world, from mischievous foxes to dreamy forest spirits.
-date: 2025-08-11
+date: 2025-08-06
 tags: [labubu, popmart, kasing lung, toy collecting, character guide]
 cover: /images/labubu-friends-cover.jpg
 ---

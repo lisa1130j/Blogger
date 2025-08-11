@@ -38,6 +38,9 @@ export default function Home() {
         />
         <div className="hero-content">
           <h1>That Labubu Life</h1>
+          <div className="welcome-message">
+            <p>New to Labubu or a lifelong fan? Welcome to the burrow — where curiosity meets chaos and every ear tells a story.</p>
+          </div>
           <div className="verify-section">
             <h2>Verify Your Labubu</h2>
             <p>Ensure your Labubu is authentic by checking its verification code on PopMart's official site.</p>

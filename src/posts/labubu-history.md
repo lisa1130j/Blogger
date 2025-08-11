@@ -1,6 +1,6 @@
 ---
 title: "The History of Labubu in Pop Mart Collections"
-date: "2025-08-07"
+date: "2025-05-07"
 description: "Tracing Labubu's journey from concept to global icon."
 ---
 

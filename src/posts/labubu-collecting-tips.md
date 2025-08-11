@@ -1,6 +1,6 @@
 ---
 title: "Top 5 Tips for New Labubu Collectors"
-date: "2025-08-09"
+date: "2025-07-09"
 description: "Starting your Labubu collection? Here’s how to find the best pieces and avoid common pitfalls."
 ---
 

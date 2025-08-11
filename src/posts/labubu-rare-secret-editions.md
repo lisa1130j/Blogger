@@ -1,7 +1,7 @@
 ---
 title: "Labubu’s Rare & Secret Editions: What Makes Them Special"
 description: Learn about the ultra-rare Labubu figures, how they’re released, and why collectors are willing to pay hundreds for them.
-date: 2025-08-11
+date: 2025-07-17
 tags: [labubu, popmart, toy collecting, rare, secret edition]
 cover: /images/labubu-rare-cover.jpg
 ---
