@@ -9,6 +9,7 @@ import { BlogPostType } from './types/BlogPost'
 import { features } from './config/features'
 import Home from './pages/Home'
 import Post from './pages/Post'
+import { Analytics } from "@vercel/analytics/react";
 
 const initialPosts: BlogPostType[] = []
 
