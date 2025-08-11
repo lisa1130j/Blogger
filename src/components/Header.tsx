@@ -35,7 +35,12 @@ const Header = () => {
                 </Link>
               </li>
             )}
-          </ul>
+              <li>
+                <Link to="/community">
+                  Community
+                </Link>
+              </li>
+              </ul>
         </nav>
       </div>
     </header>

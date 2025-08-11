@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import Community from './pages/Community';
 import Header from './components/Header'
 import BlogList from './components/BlogList'
 import BlogPost from './components/BlogPost'
@@ -31,13 +32,14 @@ function App() {
         <Header />
         <main>
           <div className="container"> 
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/:slug" element={<Post />} />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/:slug" element={<Post />} />
               <Route path="/create" element={<CreatePost onAddPost={addPost} />} />
               {features.enableProducts && (
                 <Route path="/products" element={<Products />} />
               )}
+              <Route path="/community" element={<Community />} />
             </Routes>
             <Analytics/>
           </div>
