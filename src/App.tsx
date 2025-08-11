@@ -38,6 +38,7 @@ function App() {
               {features.enableProducts && (
                 <Route path="/products" element={<Products />} />
               )}
+              <Analytics />
             </Routes>
           </div>
         </main>
