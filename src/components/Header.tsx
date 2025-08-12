@@ -35,11 +35,11 @@ const Header = () => {
                 </Link>
               </li>
             )}
-              {/* <li>
+              <li>
                 <Link to="/community">
                   Community
                 </Link>
-              </li> */}
+              </li>
               <li>
                 <Link to="/authenticity-verification">
                   <Shield size={18} />
