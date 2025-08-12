@@ -1,21 +1,20 @@
+/* Community Layout */
 .community-container {
-  max-width: 1200px;
-  margin: 0 auto;
   padding: 2rem;
 }
 
-.community-flex {
-  display: flex;
-  gap: 2rem;
-}
-
 .community-sidebar {
-  width: 250px;
-  flex-shrink: 0;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  position: sticky;
+  top: var(--spacing-xl);
+  height: fit-content;
 }
 
 .community-content {
-  flex: 1;
+  position: relative;
 }
 
 .sidebar-title {
@@ -237,13 +236,11 @@
   border-radius: 1rem;
 }
 
-@media (max-width: 768px) {
-  .community-flex {
-    flex-direction: column;
-  }
-
+@media (max-width: 1024px) {
   .community-sidebar {
-    width: 100%;
+    position: relative;
+    top: 0;
+    margin-bottom: var(--spacing-xl);
   }
 
   .sidebar-list {
@@ -254,5 +251,8 @@
 
   .sidebar-list li {
     margin-bottom: 0;
+    flex: 1;
+    min-width: 150px;
+    text-align: center;
   }
 }

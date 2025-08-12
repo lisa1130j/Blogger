@@ -240,7 +240,7 @@ const Community: React.FC = () => {
   }
 
   return (
-    <main className="community-container community-flex">
+    <main className="page-layout">
       <aside className="community-sidebar">
         <h2 className="sidebar-title">Topics</h2>
         <ul className="sidebar-list">
@@ -258,6 +258,10 @@ const Community: React.FC = () => {
           ))}
         </ul>
       </aside>
+      <div className="main-content">
+        <div className="ad-container top">
+          Ad Space (728x90)
+        </div>
       <section className="community-content">
         <div className="community-filter">
           <input
@@ -419,7 +423,16 @@ const Community: React.FC = () => {
             ))}
           </div>
         </div>
+        <div className="ad-container bottom">
+          Ad Space (728x90)
+        </div>
       </section>
+      </div>
+      <aside className="sidebar">
+        <div className="ad-container sidebar">
+          Ad Space (300x600)
+        </div>
+      </aside>
     </main>
   );
 };
