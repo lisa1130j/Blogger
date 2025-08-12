@@ -29,7 +29,9 @@ const items: Item[] = Object.entries(rawPosts)
 
 export default function Home() {
   return (
-    <main style={{ maxWidth: 760, margin: "40px auto", padding: "0 16px" }}>
+    <>
+      <div className="ad-container fixed-top">Ad Space (728x90)</div>
+      <main style={{ maxWidth: 760, margin: "40px auto", padding: "0 16px" }}>
       <div className="hero-section">
         <img 
           src="/images/labubu-hero.png" 
@@ -65,5 +67,8 @@ export default function Home() {
         ))}
       </ul>
     </main>
+    <div className="ad-container fixed-bottom">Ad Space (728x90)</div>
+    <div className="ad-container fixed-right">Ad Space (300x600)</div>
+    </>
   );
 }
