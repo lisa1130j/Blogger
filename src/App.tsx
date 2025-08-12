@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Community from './pages/Community';
 import AuthenticityVerification from './pages/AuthenticityVerification';
+import Auth from './pages/Auth';
 import Header from './components/Header'
 import BlogList from './components/BlogList'
 import BlogPost from './components/BlogPost'
@@ -11,7 +12,8 @@ import { BlogPostType } from './types/BlogPost'
 import { features } from './config/features'
 import Home from './pages/Home'
 import Post from './pages/Post'
-import { Analytics } from "@vercel/analytics/react";
+import { Analytics } from "@vercel/analytics/react"
+import { AuthProvider } from './contexts/AuthContext'
 
 const initialPosts: BlogPostType[] = []
 
@@ -28,26 +30,29 @@ function App() {
   }
 
   return (
-    <Router>
-      <div className="App">
-        <Header />
-        <main>
-          <div className="container"> 
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/:slug" element={<Post />} />
-              <Route path="/create" element={<CreatePost onAddPost={addPost} />} />
-              {features.enableProducts && (
-                <Route path="/products" element={<Products />} />
-              )}
-              <Route path="/community" element={<Community />} />
-              <Route path="/authenticity-verification" element={<AuthenticityVerification />} />
-            </Routes>
-            <Analytics/>
-          </div>
-        </main>
-      </div>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <div className="App">
+          <Header />
+          <main>
+            <div className="container"> 
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/create" element={<CreatePost onAddPost={addPost} />} />
+                {features.enableProducts && (
+                  <Route path="/products" element={<Products />} />
+                )}
+                <Route path="/community" element={<Home />} />
+                <Route path="/authenticity-verification" element={<AuthenticityVerification />} />
+                <Route path="/auth" element={<Home />} />
+                <Route path="/:slug" element={<Post />} />
+              </Routes>
+              <Analytics/>
+            </div>
+          </main>
+        </div>
+      </Router>
+    </AuthProvider>
   )
 }
 

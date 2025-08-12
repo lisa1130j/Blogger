@@ -29,9 +29,16 @@ const items: Item[] = Object.entries(rawPosts)
 
 export default function Home() {
   return (
-    <>
-      <div className="ad-container fixed-top">Ad Space (728x90)</div>
-      <main style={{ maxWidth: 760, margin: "40px auto", padding: "0 16px" }}>
+    <div className="relative max-w-[1400px] mx-auto px-4 min-h-screen">
+      {/* Top Banner Ad */}
+      <div className="flex justify-center mb-8">
+        <div className="ad-container bg-gray-100 rounded-lg p-4 text-center h-[90px] w-[728px] flex items-center justify-center">
+          Ad Space (728x90)
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,_1fr)_300px] gap-8">
+        <main className="min-w-0">
       <div className="hero-section">
         <img 
           src="/images/labubu-hero.png" 
@@ -57,18 +64,33 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <ul>
+      <ul className="space-y-6 mt-10">
         {items.map((p) => (
-          <li key={p.slug} style={{ margin: "12px 0" }}>
-            <a href={`/${p.slug}`} style={{ fontWeight: 600 }}>{p.title}</a>
-            {p.description && <div style={{ opacity: 0.85 }}>{p.description}</div>}
-            {p.date && <small style={{ opacity: 0.6 }}>{p.date}</small>}
+          <li key={p.slug} className="border-b border-gray-100 pb-6 last:border-0">
+            <a href={`/${p.slug}`} className="text-lg font-semibold hover:text-primary transition-colors">{p.title}</a>
+            {p.description && <div className="mt-2 text-gray-600">{p.description}</div>}
+            {p.date && <div className="mt-2 text-sm text-gray-500">{p.date}</div>}
           </li>
         ))}
       </ul>
-    </main>
-    <div className="ad-container fixed-bottom">Ad Space (728x90)</div>
-    <div className="ad-container fixed-right">Ad Space (300x600)</div>
-    </>
+        </main>
+        
+        {/* Sidebar Ad */}
+        <aside className="hidden lg:block h-[calc(100vh-6rem)] w-[300px] max-w-[300px]">
+          <div className="sticky top-24">
+            <div className="ad-container bg-gray-100 rounded-lg p-4 text-center h-[500px] flex items-center justify-center">
+              Ad Space (300x500)
+            </div>
+          </div>
+        </aside>
+      </div>
+      
+      {/* Banner Ads */}
+      {/* <div className="flex justify-center my-8">
+        <div className="ad-container bg-gray-100 rounded-lg p-4 text-center h-[90px] w-[728px] flex items-center justify-center">
+          Ad Space (728x90)
+        </div>
+      </div> */}
+    </div>
   );
 }

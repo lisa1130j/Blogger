@@ -1,8 +1,13 @@
-import { Link } from 'react-router-dom'
-import { PenTool, Home, ShoppingBag, Shield } from 'lucide-react'
+import { Link, useNavigate } from 'react-router-dom'
+import { PenTool, Home, ShoppingBag, Shield, UserCircle } from 'lucide-react'
 import { features } from '../config/features'
+import { useAuth } from '../contexts/AuthContext'
+import { UserMenu } from './auth/UserMenu'
 
 const Header = () => {
+  const { user } = useAuth()
+  const navigate = useNavigate()
+
   return (
     <header className="header">
       <div className="container">
@@ -35,18 +40,31 @@ const Header = () => {
                 </Link>
               </li>
             )}
-              {/* <li>
-                <Link to="/community">
-                  Community
-                </Link>
-              </li> */}
-              <li>
-                <Link to="/authenticity-verification">
-                  <Shield size={18} />
-                  Authenticity & Verification
-                </Link>
-              </li>
-              </ul>
+            {/* <li>
+              <Link to="/community">
+                Community
+              </Link>
+            </li> */}
+            <li>
+              <Link to="/authenticity-verification">
+                <Shield size={18} />
+                Authenticity & Verification
+              </Link>
+            </li>
+            {/* <li>
+              {user ? (
+                <UserMenu />
+              ) : (
+                <button
+                  onClick={() => navigate('/auth')}
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors"
+                >
+                  <UserCircle size={18} />
+                  Sign In
+                </button>
+              )}
+            </li> */}
+          </ul>
         </nav>
       </div>
     </header>

@@ -1,8 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
 import './Community.css';
 import { Topic, Post, Reply } from '../types/Database';
 import * as communityService from '../services/communityService';
+import { useAuth } from '../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const Community: React.FC = () => {
   const [topics, setTopics] = useState<Topic[]>([]);
@@ -11,6 +12,8 @@ const Community: React.FC = () => {
   const [selectedTopic, setSelectedTopic] = useState<string>('');
   const [filter, setFilter] = useState('');
   const [activePostingTopic, setActivePostingTopic] = useState<string | null>(null);
+  const { user, profile } = useAuth();
+  const navigate = useNavigate();
   const [inputs, setInputs] = useState<{ [topicId: string]: { author: string; content: string; location?: string; image?: string } }>(
     Object.fromEntries(topics.map(t => [t.id, { author: '', content: '', location: '', image: '' }]))
   );
@@ -61,7 +64,8 @@ const Community: React.FC = () => {
 
       const newPost = await communityService.createPost({
         topic_id: topicId,
-        author: author.trim() ? author : 'Anonymous',
+        user_id: user?.id,
+        author: user ? (profile?.username || user.email?.split('@')[0] || 'User') : (author.trim() ? author : 'Anonymous'),
         content,
         location: topicId === 'finding' ? location : undefined,
         image_url: topicId === 'hangouts' ? image : undefined,
@@ -92,7 +96,8 @@ const Community: React.FC = () => {
 
       await communityService.createReply({
         post_id: postId,
-        author: author.trim() ? author : 'Anonymous',
+        user_id: user?.id,
+        author: user ? (profile?.username || user.email?.split('@')[0] || 'User') : (author.trim() ? author : 'Anonymous'),
         content,
       });
 
@@ -284,9 +289,9 @@ const Community: React.FC = () => {
             <button
               className="create-post-btn"
               style={{marginBottom: '1.5rem', background: 'linear-gradient(90deg, #6366f1 0%, #f472b6 100%)', color: '#fff', border: 'none', borderRadius: '8px', padding: '0.7rem 1.6rem', fontWeight: 700, fontSize: '1.1rem', cursor: 'pointer', boxShadow: '0 1px 4px rgba(99,102,241,0.08)'}}
-              onClick={() => setActivePostingTopic(topic.id)}
+              onClick={() => user ? setActivePostingTopic(topic.id) : navigate('/auth')}
             >
-              Create a Post
+              {user ? 'Create a Post' : 'Sign in to Post'}
             </button>
           )}
           {activePostingTopic === topic.id && (
@@ -298,15 +303,17 @@ const Community: React.FC = () => {
                 setActivePostingTopic(null);
               }}
             >
-              <div className="form-group">
-                <label>Name (optional)</label>
-                <input
-                  type="text"
-                  placeholder="Your name (optional)"
-                  value={inputs[topic.id].author}
-                  onChange={e => handleInputChange(topic.id, 'author', e.target.value)}
-                />
-              </div>
+              {!user && (
+                <div className="form-group">
+                  <label>Name (optional)</label>
+                  <input
+                    type="text"
+                    placeholder="Your name (optional)"
+                    value={inputs[topic.id].author}
+                    onChange={e => handleInputChange(topic.id, 'author', e.target.value)}
+                  />
+                </div>
+              )}
               {(topic.id === 'finding' || topic.id === 'hangouts') && (
                 <div className="form-group">
                   {topic.id === 'finding' && (
@@ -397,13 +404,15 @@ const Community: React.FC = () => {
                       }}
                       style={{marginTop: '1rem', display: 'flex', gap: '0.5rem', alignItems: 'flex-end', flexWrap: 'wrap'}}
                     >
-                      <input
-                        type="text"
-                        placeholder="Your name (optional)"
-                        value={replyInputs[post.id]?.author || ''}
-                        onChange={e => handleReplyInputChange(post.id, 'author', e.target.value)}
-                        style={{minWidth: '120px'}}
-                      />
+                      {!user && (
+                        <input
+                          type="text"
+                          placeholder="Your name (optional)"
+                          value={replyInputs[post.id]?.author || ''}
+                          onChange={e => handleReplyInputChange(post.id, 'author', e.target.value)}
+                          style={{minWidth: '120px'}}
+                        />
+                      )}
                       <textarea
                         placeholder="Write a reply..."
                         value={replyInputs[post.id]?.content || ''}
@@ -416,7 +425,13 @@ const Community: React.FC = () => {
                       <button type="button" onClick={() => setActiveReply(null)} style={{marginLeft: '0.5rem', background: '#eee', color: '#6366f1', border: 'none', borderRadius: '8px', padding: '0.5rem 1rem', fontWeight: 600, cursor: 'pointer'}}>Cancel</button>
                     </form>
                   ) : (
-                    <button className="show-reply-btn" style={{marginTop: '1rem', background: 'linear-gradient(90deg, #6366f1 0%, #f472b6 100%)', color: '#fff', border: 'none', borderRadius: '8px', padding: '0.5rem 1.2rem', fontWeight: 700, cursor: 'pointer', boxShadow: '0 1px 4px rgba(99,102,241,0.08)'}} onClick={() => setActiveReply(post.id)}>Reply</button>
+                    <button 
+                      className="show-reply-btn" 
+                      style={{marginTop: '1rem', background: 'linear-gradient(90deg, #6366f1 0%, #f472b6 100%)', color: '#fff', border: 'none', borderRadius: '8px', padding: '0.5rem 1.2rem', fontWeight: 700, cursor: 'pointer', boxShadow: '0 1px 4px rgba(99,102,241,0.08)'}} 
+                      onClick={() => user ? setActiveReply(post.id) : navigate('/auth')}
+                    >
+                      {user ? 'Reply' : 'Sign in to Reply'}
+                    </button>
                   )}
                 </div>
               </div>

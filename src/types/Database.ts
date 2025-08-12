@@ -1,6 +1,7 @@
 export interface Reply {
   id: string
   post_id: string
+  user_id?: string
   author: string
   content: string
   created_at: string
@@ -9,6 +10,7 @@ export interface Reply {
 export interface Post {
   id: string
   topic_id: string
+  user_id?: string
   author: string
   content: string
   location?: string
