@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { PenTool, Home, ShoppingBag } from 'lucide-react'
+import { PenTool, Home, ShoppingBag, Shield } from 'lucide-react'
 import { features } from '../config/features'
 
 const Header = () => {
@@ -38,6 +38,12 @@ const Header = () => {
               <li>
                 <Link to="/community">
                   Community
+                </Link>
+              </li>
+              <li>
+                <Link to="/authenticity-verification">
+                  <Shield size={18} />
+                  Authenticity & Verification
                 </Link>
               </li>
               </ul>

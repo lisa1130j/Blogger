@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Community from './pages/Community';
+import AuthenticityVerification from './pages/AuthenticityVerification';
 import Header from './components/Header'
 import BlogList from './components/BlogList'
 import BlogPost from './components/BlogPost'
@@ -40,6 +41,7 @@ function App() {
                 <Route path="/products" element={<Products />} />
               )}
               <Route path="/community" element={<Community />} />
+              <Route path="/authenticity-verification" element={<AuthenticityVerification />} />
             </Routes>
             <Analytics/>
           </div>
