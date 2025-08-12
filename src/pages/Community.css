@@ -1,3 +1,101 @@
+@media (max-width: 900px) {
+  .community-flex {
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+  .community-sidebar {
+    max-width: 100%;
+    min-width: 0;
+    width: 100%;
+    margin-bottom: 1.5rem;
+    padding: 1rem 0.5rem;
+  }
+  .community-content {
+    min-width: 0;
+    width: 100%;
+  }
+  .community-section {
+    padding: 1.2rem 0.7rem 1.5rem 0.7rem;
+  }
+  .community-container {
+    padding: 1.2rem 0.5rem;
+    max-width: 100vw;
+    border-radius: 0.7rem;
+  }
+  .create-post-form {
+    padding: 1rem;
+    max-width: 100%;
+  }
+  .form-group input[type="text"],
+  .form-group textarea,
+  .file-input {
+    font-size: 1rem;
+    padding: 0.7rem;
+    min-width: 0;
+    max-width: 100%;
+  }
+  .form-group textarea {
+    min-height: 100px;
+  }
+  .community-filter {
+    padding: 0.7rem;
+    border-radius: 10px;
+  }
+  .community-filter input {
+    font-size: 1rem;
+    padding: 0.7rem;
+    border-radius: 8px;
+  }
+  .community-post {
+    padding: 0.7rem;
+  }
+  .post-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+    font-size: 0.98rem;
+  }
+  .post-image img {
+    max-height: 180px;
+  }
+}
+
+@media (max-width: 600px) {
+  .community-section {
+    padding: 0.7rem 0.2rem 1rem 0.2rem;
+  }
+  .community-container {
+    padding: 0.5rem 0.1rem;
+    border-radius: 0.4rem;
+  }
+  .create-post-form {
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+  }
+  .form-group label {
+    font-size: 1rem;
+  }
+  .form-actions {
+    flex-direction: column;
+    gap: 0.7rem;
+    margin-top: 1rem;
+  }
+  .btn-primary, .btn-secondary {
+    width: 100%;
+    padding: 0.7rem 0;
+    font-size: 1rem;
+  }
+  .community-posts {
+    margin-top: 0.2rem;
+  }
+  .community-post {
+    padding: 0.5rem;
+    border-radius: 0.4rem;
+  }
+  .post-image img {
+    max-height: 120px;
+  }
+}
 .replies-list {
   margin-top: 1.1rem;
   margin-bottom: 0.5rem;
