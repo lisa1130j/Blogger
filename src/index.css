@@ -7,6 +7,28 @@
 @tailwind utilities;
 
 :root {
+  /* Primary Colors */
+  --color-primary: #ff6b9c;
+  --color-primary-light: rgba(255, 107, 156, 0.2);
+  --color-secondary: #6c757d;
+  --color-accent: #6cdfff;
+  --color-accent-2: #6cdfff;
+  
+  /* Text Colors */
+  --color-text: #333;
+  --color-text-secondary: #666;
+  --color-text-muted: #888;
+  
+  /* Border Colors */
+  --color-border: #e5e7eb;
+  
+  /* Error Colors */
+  --color-error: #dc3545;
+  
+  /* Background Colors */
+  --color-bg: #fff;
+  --color-bg-secondary: #f8f9fa;
+  
   /* Typography */
   --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   --font-family-heading: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
