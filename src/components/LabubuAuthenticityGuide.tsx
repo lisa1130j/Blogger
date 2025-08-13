@@ -265,12 +265,7 @@ export default function LabubuAuthenticityGuide({
           </section>
       </div>
 
-      {/* Sidebar Ad */}
-      <aside className="hidden lg:block">
-        <div className="sticky top-24 w-[300px]">
-          <AdPlaceholder format="sidebar" />
-        </div>
-      </aside>
+   
     </div>
   );
 }
