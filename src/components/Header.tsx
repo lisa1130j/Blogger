@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom'
-import { PenTool, Home, ShoppingBag, Shield, UserCircle } from 'lucide-react'
+import { PenTool, Home, ShoppingBag, Shield, Award, UserCircle } from 'lucide-react'
 import { features } from '../config/features'
 import { useAuth } from '../contexts/AuthContext'
 import { UserMenu } from './auth/UserMenu'
@@ -49,6 +49,19 @@ const Header = () => {
               <Link to="/authenticity-verification">
                 <Shield size={18} />
                 Authenticity & Verification
+              </Link>
+            </li>
+           
+            <li>
+              <Link to="/about">
+                <UserCircle size={18} />
+                About
+              </Link>
+            </li>
+            <li>
+              <Link to="/contact">
+                <PenTool size={18} />
+                Contact
               </Link>
             </li>
             {/* <li>
