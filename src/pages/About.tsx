@@ -26,7 +26,7 @@ export default function About() {
               About That Labubu Life
             </h1>
             <p className="lead">
-              <strong>That Labubu Life</strong> is your source for Labubu news, tips, and collecting guidance. From spotting authentic pieces to staying up-to-date on the latest releases, we help collectors enjoy and protect their Labubu treasures.
+              <strong>That Labubu Life</strong> is your source for Labubu news, tips, and collecting guidance. From spotting authentic pieces to staying up-to-date on the latest releases, we help collectors enjoy and protect their Labubu treasures. There’s more in the works, so check back often — not just for the fun articles, but for new features we hope you’ll enjoy soon!
             </p>
           </div>
 
