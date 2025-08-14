@@ -1,6 +1,6 @@
 ---
 title: "What Is Labubu? Pop Mart's Mischievous Star Explained"
-date: "2025-05-01"
+date: "2025-03-10"
 description: "A deep dive into the mischievous Labubu, Pop Mart's beloved character."
 ---
 

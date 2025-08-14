@@ -1,7 +1,7 @@
 ---
 title: "Where to Buy & Trade Labubu Figures: Beyond Pop Mart"
 description: Your complete guide to finding Labubu figures online, at events, and through collector communities.
-date: 2025-08-02
+date: 2025-03-22
 tags: [labubu, popmart, toy collecting, buying, trading]
 cover: /images/labubu-buy-cover.png
 ---

@@ -1,7 +1,7 @@
 ---
 title: "The Story Behind Labubu’s Creation: From Kasing Lung’s Sketchbook to Pop Mart’s Global Phenomenon"
 description: A deep dive into Labubu’s origin story, its creator Kasing Lung, and how this mischievous character became a worldwide collectible sensation.
-date: 2025-06-11
+date: 2025-04-24
 tags: [labubu, popmart, kasing lung, art toys, designer toys]
 cover: /public/images/labubu-origin-cover.jpg
 ---
