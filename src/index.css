@@ -110,7 +110,7 @@
   :root {
     --color-primary: #FF6B9C;
     --color-primary-hover: #FF4785;
-    --color-primary-light: #4A1526;
+    --color-primary-light: rgba(255, 107, 156, 0.15);
     --color-secondary: #9C88FF;
     --color-accent: #FFB86C;
     --color-accent-2: #6CDFFF;
@@ -130,7 +130,7 @@
     
     --color-text-primary: #FFFFFF;
     --color-text-secondary: #E2E8F0;
-    --color-text-muted: #A0AEC0;
+    --color-text-muted: #CBD5E0;
     
     --shadow-sm: 0 2px 4px 0 rgba(0, 0, 0, 0.4);
     --shadow-md: 0 4px 8px rgba(255, 107, 156, 0.15);
@@ -651,6 +651,39 @@ main {
   .blog-post {
     background: var(--color-surface);
     border-color: var(--color-primary);
+  }
+
+  .blog-posts .card {
+    background: var(--color-surface) !important;
+    border: 1px solid var(--color-border);
+  }
+
+  .blog-posts .card:nth-child(even) {
+    background: linear-gradient(135deg, 
+      rgba(255, 107, 156, 0.1),
+      rgba(108, 223, 255, 0.1)
+    ) !important;
+  }
+
+  .blog-posts .card-text {
+    color: var(--color-text-secondary);
+  }
+
+  .blog-posts small {
+    color: var(--color-text-muted) !important;
+  }
+
+  .header .nav-link {
+    color: var(--color-text-secondary);
+  }
+
+  .header .nav-link:hover {
+    color: var(--color-primary);
+  }
+
+  .header .navbar-collapse {
+    background: var(--color-surface);
+    border-top-color: var(--color-border);
   }
 }
 
