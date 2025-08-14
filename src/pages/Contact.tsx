@@ -1,32 +1,43 @@
 import React from 'react';
+import { Container, Row, Col } from 'react-bootstrap';
 import AdPlaceholder from '../components/AdPlaceholder';
 
 export default function Contact() {
   return (
-    <div className="relative max-w-[1400px] mx-auto px-4 min-h-screen">
+    <Container style={{ maxWidth: '1400px' }}>
       {/* Top Banner Ad */}
-      <div className="flex justify-center mb-8">
+      <div className="d-flex justify-content-center mb-4">
         <AdPlaceholder format="banner" />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,_1fr)_300px] gap-8">
-        <main className="min-w-0">
+      <Row className="g-4">
+        <Col lg={9}>
           {/* Hero Section */}
-          <div className="hero-section">
-            <div className="hero-content">
-              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight font-heading bg-gradient-to-r from-primary via-accent to-accent-2 bg-clip-text text-transparent">
-                Contact That Labubu Life
-              </h1>
-              <div className="welcome-message">
-                <p>Have a question, tip, or partnership idea? Send a note and we'll get back within 1–2 business days.
-                  <br />
-                  <b>info@thatlabubulife.com</b>
-                </p>
-              </div>
-            </div>
+          <div className="mb-4">
+            <h1 
+              className="display-4 fw-bold"
+              style={{
+                background: "linear-gradient(135deg, var(--bs-primary), var(--bs-info), var(--bs-secondary))",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text"
+              }}
+            >
+              Contact That Labubu Life
+            </h1>
+            <p className="lead mb-2">
+              Have a question, tip, or partnership idea? Send a note and we'll get back within 1–2 business days.
+            </p>
+            <p className="lead fw-bold">info@thatlabubulife.com</p>
           </div>
-        </main>
-      </div>
-    </div>
+        </Col>
+
+        <Col lg={3} className="mt-5">
+          <div className="sticky-top" style={{ top: '6rem' }}>
+            <AdPlaceholder format="sidebar" />
+          </div>
+        </Col>
+      </Row>
+    </Container>
   );
 }

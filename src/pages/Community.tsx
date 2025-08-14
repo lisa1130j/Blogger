@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import './Community.css';
+import { Container, Row, Col, Card, Form, Button, ListGroup, Spinner, Alert, Image } from 'react-bootstrap';
 import { Topic, Post, Reply } from '../types/Database';
 import * as communityService from '../services/communityService';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import AdPlaceholder from '../components/AdPlaceholder';
 
-const Community: React.FC = () => {
+const Community = () => {
   const [topics, setTopics] = useState<Topic[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -18,13 +19,14 @@ const Community: React.FC = () => {
     Object.fromEntries(topics.map(t => [t.id, { author: '', content: '', location: '', image: '' }]))
   );
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [replyInputs, setReplyInputs] = useState<{ [postId: string]: { author: string; content: string } }>({});
+  const [activeReply, setActiveReply] = useState<string | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       setSelectedFile(file);
       
-      // Convert file to data URL
       const reader = new FileReader();
       reader.onloadend = () => {
         if (typeof reader.result === 'string' && topic) {
@@ -34,8 +36,6 @@ const Community: React.FC = () => {
       reader.readAsDataURL(file);
     }
   };
-  const [replyInputs, setReplyInputs] = useState<{ [postId: string]: { author: string; content: string } }>({});
-  const [activeReply, setActiveReply] = useState<string | null>(null);
 
   const handleInputChange = (topicId: string, field: string, value: string) => {
     setInputs(prev => ({
@@ -62,7 +62,7 @@ const Community: React.FC = () => {
       const { author, content, location, image } = inputs[topicId];
       if (!content.trim()) return;
 
-      const newPost = await communityService.createPost({
+      await communityService.createPost({
         topic_id: topicId,
         user_id: user?.id,
         author: user ? (profile?.username || user.email?.split('@')[0] || 'User') : (author.trim() ? author : 'Anonymous'),
@@ -71,10 +71,7 @@ const Community: React.FC = () => {
         image_url: topicId === 'hangouts' ? image : undefined,
       });
 
-      // Refresh posts for this topic
       const updatedPosts = await communityService.getPostsByTopic(topicId);
-      console.log('Updated posts after creation:', updatedPosts);
-      
       setTopics(prevTopics => 
         prevTopics.map(t => ({
           ...t,
@@ -101,10 +98,7 @@ const Community: React.FC = () => {
         content,
       });
 
-      // Refresh posts for this topic to get updated replies
       const updatedPosts = await communityService.getPostsByTopic(selectedTopic);
-      console.log('Updated posts after reply:', updatedPosts);
-      
       setTopics(prevTopics => 
         prevTopics.map(t => ({
           ...t,
@@ -120,31 +114,21 @@ const Community: React.FC = () => {
     }
   };
 
-  // Load initial data
   useEffect(() => {
     const loadTopics = async () => {
       try {
         setLoading(true);
-        console.log('Loading topics...');
         const topics = await communityService.getTopics();
-        console.log('Topics loaded:', topics);
         
         if (topics.length > 0) {
-          // Set the selected topic first
           setSelectedTopic(topics[0].id);
-          console.log('Selected first topic:', topics[0]);
-          
-          // Load posts for the first topic
           const posts = await communityService.getPostsByTopic(topics[0].id);
-          console.log('Posts loaded for first topic:', posts);
           
-          // Initialize all topics with empty posts array
           setTopics(topics.map(t => ({
             ...t,
             posts: t.id === topics[0].id ? posts : []
           })));
           
-          // Initialize inputs state with all topics
           setInputs(Object.fromEntries(
             topics.map(t => [t.id, { author: '', content: '', location: '', image: '' }])
           ));
@@ -160,7 +144,6 @@ const Community: React.FC = () => {
     loadTopics();
   }, []);
 
-  // Load posts when topic changes
   useEffect(() => {
     const loadPosts = async () => {
       try {
@@ -196,259 +179,300 @@ const Community: React.FC = () => {
       );
     }) || [];
 
-  console.log('Selected topic:', selectedTopic);
-  console.log('Topics:', topics);
-  console.log('Filtered posts:', filteredPosts);
-
   const topic = topics.find(t => t.id === selectedTopic)!;
 
   if (loading && !topics.length) {
     return (
-      <div className="loading-container" style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        minHeight: '200px',
-        color: 'var(--color-primary)'
-      }}>
-        <div className="loading-spinner" />
-      </div>
+      <Container className="d-flex justify-content-center align-items-center" style={{ minHeight: '200px' }}>
+        <Spinner animation="border" variant="primary" />
+      </Container>
     );
   }
 
   if (error) {
     return (
-      <div className="error-container" style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        minHeight: '200px',
-        color: 'var(--color-error)'
-      }}>
-        {error}
-      </div>
+      <Container className="d-flex justify-content-center align-items-center" style={{ minHeight: '200px' }}>
+        <Alert variant="danger">{error}</Alert>
+      </Container>
     );
   }
 
   if (!topic) {
     return (
-      <div className="empty-container" style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        minHeight: '200px',
-        color: 'var(--color-text-muted)'
-      }}>
-        No topics available.
-      </div>
+      <Container className="d-flex justify-content-center align-items-center" style={{ minHeight: '200px' }}>
+        <Alert variant="info">No topics available.</Alert>
+      </Container>
     );
   }
 
   return (
-    <main className="page-layout">
-      <aside className="community-sidebar">
-        <h2 className="sidebar-title">Topics</h2>
-        <ul className="sidebar-list">
-          {topics.map(topic => (
-            <li
-              key={topic.id}
-              className={selectedTopic === topic.id ? 'active' : ''}
-              onClick={() => {
-                setSelectedTopic(topic.id);
-                setActivePostingTopic(null);
-              }}
-            >
-              {topic.title}
-            </li>
-          ))}
-        </ul>
-      </aside>
-      <div className="main-content">
-        <div className="ad-container top">
-          Ad Space (728x90)
-        </div>
-      <section className="community-content">
-        <div className="community-filter">
-          <input
-            type="text"
-            placeholder="Search posts (author, content, location...)"
-            value={filter}
-            onChange={e => setFilter(e.target.value)}
-          />
-        </div>
-        <div className="community-section" key={topic.id} style={{ position: 'relative' }}>
-          {loading && (
-            <div className="loading-overlay">
-              <div className="loading-spinner" />
-            </div>
-          )}
-          <h2>{topic.title}</h2>
-          <p>{topic.description}</p>
-          {/* Create Post Button and Form */}
-          {activePostingTopic !== topic.id && (
-            <button
-              className="create-post-btn"
-              style={{marginBottom: '1.5rem', background: 'linear-gradient(90deg, #6366f1 0%, #f472b6 100%)', color: '#fff', border: 'none', borderRadius: '8px', padding: '0.7rem 1.6rem', fontWeight: 700, fontSize: '1.1rem', cursor: 'pointer', boxShadow: '0 1px 4px rgba(99,102,241,0.08)'}}
-              onClick={() => user ? setActivePostingTopic(topic.id) : navigate('/auth')}
-            >
-              {user ? 'Create a Post' : 'Sign in to Post'}
-            </button>
-          )}
-          {activePostingTopic === topic.id && (
-            <form
-              className="create-post-form"
-              onSubmit={e => {
-                e.preventDefault();
-                handlePost(topic.id);
-                setActivePostingTopic(null);
-              }}
-            >
-              {!user && (
-                <div className="form-group">
-                  <label>Name (optional)</label>
-                  <input
-                    type="text"
-                    placeholder="Your name (optional)"
-                    value={inputs[topic.id].author}
-                    onChange={e => handleInputChange(topic.id, 'author', e.target.value)}
-                  />
+    <Container fluid>
+      <Row className="g-4">
+        <Col lg={3}>
+          <Card className="sticky-top" style={{ top: '1rem' }}>
+            <Card.Body>
+              <Card.Title 
+                className="mb-3"
+                style={{
+                  background: "linear-gradient(135deg, var(--bs-primary), var(--bs-info))",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text"
+                }}
+              >
+                Topics
+              </Card.Title>
+              <ListGroup variant="flush">
+                {topics.map(topic => (
+                  <ListGroup.Item
+                    key={topic.id}
+                    action
+                    active={selectedTopic === topic.id}
+                    onClick={() => {
+                      setSelectedTopic(topic.id);
+                      setActivePostingTopic(null);
+                    }}
+                    className="border-0 rounded mb-2"
+                    style={selectedTopic === topic.id ? {
+                      background: "linear-gradient(135deg, var(--bs-primary), var(--bs-info))"
+                    } : {
+                      background: "linear-gradient(135deg, rgba(255, 107, 156, 0.1), rgba(108, 223, 255, 0.1))"
+                    }}
+                  >
+                    {topic.title}
+                  </ListGroup.Item>
+                ))}
+              </ListGroup>
+            </Card.Body>
+          </Card>
+        </Col>
+
+        <Col lg={6}>
+          <div className="d-flex justify-content-center mb-4">
+            <AdPlaceholder format="banner" />
+          </div>
+
+          <Card className="mb-4">
+            <Card.Body>
+              <Form.Control
+                type="text"
+                placeholder="Search posts (author, content, location...)"
+                value={filter}
+                onChange={e => setFilter(e.target.value)}
+                className="mb-4"
+              />
+
+              {loading && (
+                <div className="text-center py-4">
+                  <Spinner animation="border" variant="primary" />
                 </div>
               )}
-              {(topic.id === 'finding' || topic.id === 'hangouts') && (
-                <div className="form-group">
-                  {topic.id === 'finding' && (
-                    <>
-                      <label>Location</label>
-                      <input
+
+              <Card.Title 
+                className="mb-3"
+                style={{
+                  background: "linear-gradient(135deg, var(--bs-primary), var(--bs-info))",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text"
+                }}
+              >
+                {topic.title}
+              </Card.Title>
+              <Card.Text className="text-muted mb-4">{topic.description}</Card.Text>
+
+              {activePostingTopic !== topic.id ? (
+                <Button
+                  variant="primary"
+                  className="mb-4 w-100"
+                  style={{
+                    background: "linear-gradient(90deg, var(--bs-primary), var(--bs-info))",
+                    border: "none"
+                  }}
+                  onClick={() => user ? setActivePostingTopic(topic.id) : navigate('/auth')}
+                >
+                  {user ? 'Create a Post' : 'Sign in to Post'}
+                </Button>
+              ) : (
+                <Form
+                  className="mb-4"
+                  onSubmit={e => {
+                    e.preventDefault();
+                    handlePost(topic.id);
+                    setActivePostingTopic(null);
+                  }}
+                >
+                  {!user && (
+                    <Form.Group className="mb-3">
+                      <Form.Label>Name (optional)</Form.Label>
+                      <Form.Control
                         type="text"
-                        placeholder="Location (e.g. Taipei, Online, etc.)"
-                        value={inputs[topic.id].location}
-                        onChange={e => handleInputChange(topic.id, 'location', e.target.value)}
-                        required={topic.id === 'finding'}
+                        placeholder="Your name (optional)"
+                        value={inputs[topic.id].author}
+                        onChange={e => handleInputChange(topic.id, 'author', e.target.value)}
                       />
-                    </>
+                    </Form.Group>
                   )}
-                  {topic.id === 'hangouts' && (
-                    <>
-                      <label>Upload Image</label>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleFileChange}
-                        required
-                        className="file-input"
-                      />
-                      {selectedFile && (
-                        <div className="image-preview">
-                          <img 
-                            src={URL.createObjectURL(selectedFile)} 
-                            alt="Preview" 
+
+                  {(topic.id === 'finding' || topic.id === 'hangouts') && (
+                    <Form.Group className="mb-3">
+                      {topic.id === 'finding' && (
+                        <>
+                          <Form.Label>Location</Form.Label>
+                          <Form.Control
+                            type="text"
+                            placeholder="Location (e.g. Taipei, Online, etc.)"
+                            value={inputs[topic.id].location}
+                            onChange={e => handleInputChange(topic.id, 'location', e.target.value)}
+                            required={topic.id === 'finding'}
                           />
-                        </div>
+                        </>
                       )}
-                    </>
+                      {topic.id === 'hangouts' && (
+                        <>
+                          <Form.Label>Upload Image</Form.Label>
+                          <Form.Control
+                            type="file"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            required
+                          />
+                          {selectedFile && (
+                            <Image 
+                              src={URL.createObjectURL(selectedFile)} 
+                              alt="Preview"
+                              className="mt-3 rounded"
+                              fluid
+                            />
+                          )}
+                        </>
+                      )}
+                    </Form.Group>
                   )}
-                </div>
+
+                  <Form.Group className="mb-3">
+                    <Form.Label>Post</Form.Label>
+                    <Form.Control
+                      as="textarea"
+                      rows={8}
+                      placeholder="Write your post..."
+                      value={inputs[topic.id].content}
+                      onChange={e => handleInputChange(topic.id, 'content', e.target.value)}
+                      required
+                    />
+                  </Form.Group>
+
+                  <div className="d-flex gap-2">
+                    <Button type="submit" variant="primary">Post</Button>
+                    <Button variant="secondary" onClick={() => setActivePostingTopic(null)}>Cancel</Button>
+                  </div>
+                </Form>
               )}
-              <div className="form-group">
-                <label>Post</label>
-                <textarea
-                  placeholder="Write your post..."
-                  value={inputs[topic.id].content}
-                  onChange={e => handleInputChange(topic.id, 'content', e.target.value)}
-                  required
-                  rows={8}
-                />
-              </div>
-              <div className="form-actions">
-                <button type="submit" className="btn-primary">Post</button>
-                <button type="button" className="btn-secondary" onClick={() => setActivePostingTopic(null)}>Cancel</button>
-              </div>
-            </form>
-          )}
-          <div className="community-posts">
-            {filteredPosts.length === 0 && <p className="no-posts">No posts found.</p>}
-            {filteredPosts.map(post => (
-              <div className="community-post" key={post.id}>
-                <div className="post-header">
-                  <span className="post-author">{post.author}</span>
-                  <span className="post-date">{new Date(post.created_at).toLocaleString()}</span>
-                  {post.location && <span className="post-location">{post.location}</span>}
-                </div>
-                <div className="post-content">
-                  {post.image_url && (
-                    <div className="post-image">
-                      <img src={post.image_url} alt="Labubu hangout" />
-                    </div>
-                  )}
-                  <span>{post.content}</span>
-                </div>
-                <div className="community-replies">
-                  {post.replies && post.replies.length > 0 && (
-                    <div className="replies-list">
-                      {post.replies.map(reply => (
-                        <div className="reply" key={reply.id}>
-                          <span className="reply-author">{reply.author}</span>
-                          <span className="reply-date">{new Date(reply.created_at).toLocaleString()}</span>
-                          <span className="reply-content">{reply.content}</span>
+
+              {filteredPosts.length === 0 ? (
+                <Alert variant="info">No posts found.</Alert>
+              ) : (
+                filteredPosts.map(post => (
+                  <Card key={post.id} className="mb-3">
+                    <Card.Body>
+                      <div className="d-flex justify-content-between align-items-center mb-3">
+                        <div className="d-flex gap-3 align-items-center">
+                          <span className="text-primary fw-bold">{post.author}</span>
+                          <small className="text-muted">{new Date(post.created_at).toLocaleString()}</small>
                         </div>
-                      ))}
-                    </div>
-                  )}
-                  {activeReply === post.id ? (
-                    <form
-                      className="reply-form"
-                      onSubmit={e => {
-                        e.preventDefault();
-                        handleReply(post.id);
-                      }}
-                      style={{marginTop: '1rem', display: 'flex', gap: '0.5rem', alignItems: 'flex-end', flexWrap: 'wrap'}}
-                    >
-                      {!user && (
-                        <input
-                          type="text"
-                          placeholder="Your name (optional)"
-                          value={replyInputs[post.id]?.author || ''}
-                          onChange={e => handleReplyInputChange(post.id, 'author', e.target.value)}
-                          style={{minWidth: '120px'}}
+                        {post.location && (
+                          <span className="text-info">{post.location}</span>
+                        )}
+                      </div>
+
+                      {post.image_url && (
+                        <Image 
+                          src={post.image_url} 
+                          alt="Labubu hangout"
+                          className="mb-3 rounded"
+                          fluid
                         />
                       )}
-                      <textarea
-                        placeholder="Write a reply..."
-                        value={replyInputs[post.id]?.content || ''}
-                        onChange={e => handleReplyInputChange(post.id, 'content', e.target.value)}
-                        required
-                        rows={2}
-                        style={{minWidth: '220px', maxWidth: '400px', fontFamily: 'inherit'}}
-                      />
-                      <button type="submit">Reply</button>
-                      <button type="button" onClick={() => setActiveReply(null)} style={{marginLeft: '0.5rem', background: '#eee', color: '#6366f1', border: 'none', borderRadius: '8px', padding: '0.5rem 1rem', fontWeight: 600, cursor: 'pointer'}}>Cancel</button>
-                    </form>
-                  ) : (
-                    <button 
-                      className="show-reply-btn" 
-                      style={{marginTop: '1rem', background: 'linear-gradient(90deg, #6366f1 0%, #f472b6 100%)', color: '#fff', border: 'none', borderRadius: '8px', padding: '0.5rem 1.2rem', fontWeight: 700, cursor: 'pointer', boxShadow: '0 1px 4px rgba(99,102,241,0.08)'}} 
-                      onClick={() => user ? setActiveReply(post.id) : navigate('/auth')}
-                    >
-                      {user ? 'Reply' : 'Sign in to Reply'}
-                    </button>
-                  )}
-                </div>
-              </div>
-            ))}
+
+                      <Card.Text>{post.content}</Card.Text>
+
+                      {post.replies && post.replies.length > 0 && (
+                        <ListGroup variant="flush" className="mb-3 border-start ps-3">
+                          {post.replies.map(reply => (
+                            <ListGroup.Item key={reply.id} className="border-0 bg-light rounded mb-2">
+                              <div className="d-flex justify-content-between align-items-center mb-1">
+                                <span className="text-secondary fw-bold">{reply.author}</span>
+                                <small className="text-muted">{new Date(reply.created_at).toLocaleString()}</small>
+                              </div>
+                              <div>{reply.content}</div>
+                            </ListGroup.Item>
+                          ))}
+                        </ListGroup>
+                      )}
+
+                      {activeReply === post.id ? (
+                        <Form
+                          onSubmit={e => {
+                            e.preventDefault();
+                            handleReply(post.id);
+                          }}
+                          className="mt-3"
+                        >
+                          {!user && (
+                            <Form.Control
+                              type="text"
+                              placeholder="Your name (optional)"
+                              value={replyInputs[post.id]?.author || ''}
+                              onChange={e => handleReplyInputChange(post.id, 'author', e.target.value)}
+                              className="mb-2"
+                            />
+                          )}
+                          <Form.Control
+                            as="textarea"
+                            rows={2}
+                            placeholder="Write a reply..."
+                            value={replyInputs[post.id]?.content || ''}
+                            onChange={e => handleReplyInputChange(post.id, 'content', e.target.value)}
+                            required
+                            className="mb-2"
+                          />
+                          <div className="d-flex gap-2">
+                            <Button type="submit" variant="primary" size="sm">Reply</Button>
+                            <Button variant="secondary" size="sm" onClick={() => setActiveReply(null)}>Cancel</Button>
+                          </div>
+                        </Form>
+                      ) : (
+                        <Button
+                          variant="primary"
+                          size="sm"
+                          style={{
+                            background: "linear-gradient(90deg, var(--bs-primary), var(--bs-info))",
+                            border: "none"
+                          }}
+                          onClick={() => user ? setActiveReply(post.id) : navigate('/auth')}
+                        >
+                          {user ? 'Reply' : 'Sign in to Reply'}
+                        </Button>
+                      )}
+                    </Card.Body>
+                  </Card>
+                ))
+              )}
+            </Card.Body>
+          </Card>
+
+          <div className="d-flex justify-content-center">
+            <AdPlaceholder format="banner" />
           </div>
-        </div>
-        <div className="ad-container bottom">
-          Ad Space (728x90)
-        </div>
-      </section>
-      </div>
-      <aside className="sidebar">
-        <div className="ad-container sidebar">
-          Ad Space (300x600)
-        </div>
-      </aside>
-    </main>
+        </Col>
+
+        <Col lg={3}>
+          <div className="sticky-top" style={{ top: '1rem' }}>
+            <AdPlaceholder format="sidebar" />
+          </div>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

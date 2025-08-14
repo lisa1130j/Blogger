@@ -1,4 +1,5 @@
 import React from 'react';
+import { Card } from 'react-bootstrap';
 
 interface AdPlaceholderProps {
   format: 'banner' | 'sidebar';
@@ -11,24 +12,19 @@ export default function AdPlaceholder({ format, className }: AdPlaceholderProps)
     : { width: '300px', height: '600px' };
 
   return (
-    <div 
-      className={`ad-container ${format} ${className || ''}`}
+    <Card 
+      className={`ad-container ${format} ${className || ''} d-flex align-items-center justify-content-center overflow-hidden small text-muted`}
       style={{
         ...dimensions,
-        overflow: 'hidden',
         background: 'linear-gradient(135deg, rgba(255, 107, 156, 0.05), rgba(108, 223, 255, 0.05))',
-        border: '1px dashed var(--color-border)',
-        borderRadius: 'var(--radius-lg)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+        border: '1px dashed var(--bs-border-color)',
         backdropFilter: 'blur(10px)',
-        transition: 'all var(--transition-normal)',
-        color: 'var(--color-text-muted)',
-        fontSize: 'var(--font-size-sm)',
+        transition: 'all 0.2s ease-in-out'
       }}
     >
-      {format === 'banner' ? '728 × 90 Ad Space' : '300 × 600 Ad Space'}
-    </div>
+      <Card.Body className="p-0 text-center">
+        {format === 'banner' ? '728 × 90 Ad Space' : '300 × 600 Ad Space'}
+      </Card.Body>
+    </Card>
   );
 }

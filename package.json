@@ -15,14 +15,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@popperjs/core": "^2.11.8",
     "@supabase/supabase-js": "^2.54.0",
     "@vercel/analytics": "^1.5.0",
     "@yudiel/react-qr-scanner": "^2.3.1",
-    "daisyui": "^5.0.50",
+    "bootstrap": "^5.3.7",
     "framer-motion": "^12.23.12",
     "html5-qrcode": "^2.3.8",
     "lucide-react": "^0.263.1",
     "react": "^18.2.0",
+    "react-bootstrap": "^2.10.10",
     "react-dom": "^18.2.0",
     "react-markdown": "^10.1.0",
     "react-router-dom": "^6.16.0",

@@ -5,6 +5,8 @@ export interface BlogPostType {
   author: string
   date: Date
   excerpt: string
+  description: string
+  slug: string
   likes?: number
   html?: string
   cover?: string

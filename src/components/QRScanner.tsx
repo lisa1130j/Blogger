@@ -1,6 +1,7 @@
 // src/components/PopmartQrGate.tsx
 import React, { useCallback, useMemo, useRef, useState } from "react";
-import { QrScanner } from "@yudiel/react-qr-scanner";
+import { Scanner, type IDetectedBarcode } from "@yudiel/react-qr-scanner";
+import { Card, Container, Alert, ListGroup } from 'react-bootstrap';
 
 type ScanState = "idle" | "scanning" | "valid" | "invalid";
 
@@ -44,7 +45,9 @@ export default function PopmartQrGate() {
 
   const lastValueRef = useRef<string>(""); // avoid duplicate fires
 
-  const handleDecode = useCallback((value: string) => {
+  const handleDecode = useCallback((detectedCodes: IDetectedBarcode[]) => {
+    if (!detectedCodes.length) return;
+    const value = detectedCodes[0].rawValue;
     if (!value || value === lastValueRef.current) return;
     lastValueRef.current = value;
     setScanned(value);
@@ -80,46 +83,49 @@ export default function PopmartQrGate() {
   );
 
   return (
-    <div className="mx-auto max-w-md p-4 rounded-2xl shadow border bg-white">
-      <h2 className="text-xl font-semibold mb-2">Scan Pop Mart authenticity QR</h2>
+    <Container className="py-4" style={{ maxWidth: '500px' }}>
+      <Card>
+        <Card.Body>
+          <Card.Title as="h2" className="mb-3">Scan Pop Mart authenticity QR</Card.Title>
 
-      <div className="rounded-xl overflow-hidden border">
-        <QrScanner
-          onDecode={handleDecode}
-          onError={(e) => setError(e?.message || "Camera error")}
-          constraints={{ facingMode: "environment" }}
-          containerStyle={{ position: "relative" }}
-        />
-      </div>
+          <div className="border rounded overflow-hidden position-relative">
+            <Scanner
+              onScan={handleDecode}
+              onError={(e: unknown) => setError(e instanceof Error ? e.message : "Camera error")}
+              constraints={{ facingMode: "environment" }}
+            />
+          </div>
 
-      {scanState !== "idle" && (
-        <div className="mt-3 text-sm">
-          {scanState === "valid" && <p className="text-green-600">Opening Pop Mart’s verification…</p>}
-          {scanState === "invalid" && (
-            <p className="text-red-600 font-medium">Blocked non-official domain.</p>
+          {scanState !== "idle" && (
+            <div className="mt-3">
+              {scanState === "valid" && <Alert variant="success">Opening Pop Mart's verification…</Alert>}
+              {scanState === "invalid" && <Alert variant="danger">Blocked non-official domain.</Alert>}
+              {error && <Alert variant="danger">{error}</Alert>}
+              {scanned && (
+                <Alert variant="info" className="mt-2">
+                  Scanned: <code>{scanned}</code>
+                </Alert>
+              )}
+            </div>
           )}
-          {error && <p className="text-red-600">{error}</p>}
-          {scanned && (
-            <p className="mt-1 break-all text-gray-600">
-              Scanned: <span className="font-mono">{scanned}</span>
-            </p>
-          )}
-        </div>
-      )}
 
-      <ul className="mt-4 space-y-1 text-xs text-gray-500 list-disc list-inside">
-        {tips.map((t) => (
-          <li key={t}>{t}</li>
-        ))}
-      </ul>
+          <ListGroup variant="flush" className="mt-4 small text-muted">
+            {tips.map((tip) => (
+              <ListGroup.Item key={tip}>{tip}</ListGroup.Item>
+            ))}
+          </ListGroup>
 
-      <div className="mt-4 rounded-lg bg-gray-50 p-3 text-xs text-gray-600">
-        <p className="font-semibold mb-1">Allowed verification hosts</p>
-        <code className="block">
-          {OFFICIAL_HOSTS.join(", ")}; plus subdomains starting with {REDIRECT_PREFIXES.join(", ")} of
-          .popmart.com
-        </code>
-      </div>
-    </div>
+          <Card className="mt-4 bg-light">
+            <Card.Body>
+              <Card.Subtitle className="mb-2">Allowed verification hosts</Card.Subtitle>
+              <code className="d-block small">
+                {OFFICIAL_HOSTS.join(", ")}; plus subdomains starting with {REDIRECT_PREFIXES.join(", ")} of
+                .popmart.com
+              </code>
+            </Card.Body>
+          </Card>
+        </Card.Body>
+      </Card>
+    </Container>
   );
 }

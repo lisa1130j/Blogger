@@ -1,5 +1,7 @@
 import React from "react";
+import { Container, Row, Col, Image, Button, Card } from 'react-bootstrap';
 import YAML from "yaml";
+import AdPlaceholder from '../components/AdPlaceholder';
 
 const rawPosts = import.meta.glob("../posts/*.md", { as: "raw", eager: true }) as Record<string, string>;
 
@@ -29,68 +31,125 @@ const items: Item[] = Object.entries(rawPosts)
 
 export default function Home() {
   return (
-    <div className="relative max-w-[1400px] mx-auto px-4 min-h-screen">
+    <Container style={{ maxWidth: '1400px' }}>
       {/* Top Banner Ad */}
-      <div className="flex justify-center mb-8">
-        <div className="ad-container bg-gray-100 rounded-lg p-4 text-center h-[90px] w-[728px] flex items-center justify-center">
-          Ad Space (728x90)
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,_1fr)_300px] gap-8">
-        <main className="min-w-0">
-      <div className="hero-section">
-        <img 
-          src="/images/labubu-hero.png" 
-          alt="Mischievous Labubu" 
-          className="hero-image"
-        />
-        <div className="hero-content">
-          <h1>That Labubu Life</h1>
-          <div className="welcome-message">
-            <p>New to Labubu or a lifelong fan? Welcome to the burrow — where curiosity meets chaos and every ear tells a story.</p>
-          </div>
-          <div className="verify-section">
-            <h2>Verify Your Labubu</h2>
-            <p>Ensure your Labubu is authentic by checking its verification code on PopMart's official site.</p>
-            <a 
-              href="https://www.popmart.com/us/help/authenticity-check" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="verify-button"
-            >
-              Verify Authenticity
-            </a>
-          </div>
-        </div>
-      </div>
-      <ul className="space-y-6 mt-10">
-        {items.map((p) => (
-          <li key={p.slug} className="border-b border-gray-100 pb-6 last:border-0">
-            <a href={`/${p.slug}`} className="text-lg font-semibold hover:text-primary transition-colors">{p.title}</a>
-            {p.description && <div className="mt-2 text-gray-600">{p.description}</div>}
-            {p.date && <div className="mt-2 text-sm text-gray-500">{p.date}</div>}
-          </li>
-        ))}
-      </ul>
-        </main>
-        
-        {/* Sidebar Ad */}
-        <aside className="hidden lg:block h-[calc(100vh-6rem)] w-[300px] max-w-[300px]">
-          <div className="sticky top-24">
-            <div className="ad-container bg-gray-100 rounded-lg p-4 text-center h-[500px] flex items-center justify-center">
-              Ad Space (300x500)
-            </div>
-          </div>
-        </aside>
+      <div className="d-flex justify-content-center mb-4">
+        <AdPlaceholder format="banner" />
       </div>
       
-      {/* Banner Ads */}
-      {/* <div className="flex justify-center my-8">
-        <div className="ad-container bg-gray-100 rounded-lg p-4 text-center h-[90px] w-[728px] flex items-center justify-center">
-          Ad Space (728x90)
-        </div>
-      </div> */}
-    </div>
+
+      <Row className="g-4">
+        <Col lg={9}>
+          {/* Hero Section */}
+          <div className="mb-5">
+            <h1 
+              className="display-4 fw-bold mb-3"
+              style={{
+                background: "linear-gradient(135deg, var(--bs-primary), var(--bs-info), var(--bs-secondary))",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text"
+              }}
+            >
+              That Labubu Life
+            </h1>
+            <p className="lead mb-5">
+              New to Labubu or a lifelong fan? Welcome to the burrow — where curiosity meets chaos and every ear tells a story.
+            </p>
+            <Row className="align-items-center bg-light p-4 rounded mb-5">
+              <Col md={8}>
+                <h2 className="h4 mb-3">Verify Your Labubu</h2>
+                <p className="mb-3">Ensure your Labubu is authentic by checking its verification code on PopMart's official site.</p>
+                <Button
+                  href="https://www.popmart.com/us/help/authenticity-check"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variant="primary"
+                  style={{
+                    background: "linear-gradient(90deg, var(--bs-primary), var(--bs-info))",
+                    border: "none"
+                  }}
+                >
+                  Verify Authenticity
+                </Button>
+              </Col>
+              <Col md={4} className="text-center">
+                <Image 
+                  src="/images/labubu-hero.png" 
+                  alt="Mischievous Labubu" 
+                  fluid
+                  style={{ maxWidth: '200px' }}
+                />
+              </Col>
+            </Row>
+          </div>
+
+          {/* Blog Posts */}
+          <div className="blog-posts">
+            {items.map((p, index) => (
+              <Card 
+                key={p.slug} 
+                className={`mb-4 border-0 shadow-sm transition-all ${index % 2 === 0 ? '' : 'bg-light'}`}
+                style={{
+                  background: index % 2 === 0 ? 
+                    'linear-gradient(135deg, rgba(255, 107, 156, 0.05), rgba(108, 223, 255, 0.05))' : 
+                    'white'
+                }}
+              >
+                <Card.Body className="p-4">
+                  <a 
+                    href={`/${p.slug}`} 
+                    className="text-decoration-none"
+                  >
+                    <Card.Title 
+                      className="h4 mb-3"
+                      style={{
+                        background: "linear-gradient(135deg, var(--bs-primary), var(--bs-info))",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        backgroundClip: "text",
+                        transition: 'opacity 0.2s'
+                      }}
+                      onMouseOver={(e: React.MouseEvent<HTMLDivElement>) => e.currentTarget.style.opacity = '0.8'}
+                      onMouseOut={(e: React.MouseEvent<HTMLDivElement>) => e.currentTarget.style.opacity = '1'}
+                    >
+                      {p.title}
+                    </Card.Title>
+                  </a>
+                  {p.description && (
+                    <Card.Text className="text-muted mb-3 lead">
+                      {p.description}
+                    </Card.Text>
+                  )}
+                  <div className="d-flex align-items-center gap-3">
+                    {p.date && (
+                      <small className="text-muted d-flex align-items-center gap-1">
+                        <i className="bi bi-calendar3"></i>
+                        {p.date}
+                      </small>
+                    )}
+                    <small className="text-muted d-flex align-items-center gap-1">
+                      <i className="bi bi-clock"></i>
+                      {Math.ceil(p.description?.length || 0 / 200)} min read
+                    </small>
+                  </div>
+                </Card.Body>
+              </Card>
+            ))}
+          </div>
+
+          {/* Bottom Banner Ad */}
+          <div className="d-flex justify-content-center my-5">
+            <AdPlaceholder format="banner" />
+          </div>
+        </Col>
+
+        <Col lg={3} className="mt-5">
+          <div className="sticky-top" style={{ top: '6rem' }}>
+            <AdPlaceholder format="sidebar" />
+          </div>
+        </Col>
+      </Row>
+    </Container>
   );
 }

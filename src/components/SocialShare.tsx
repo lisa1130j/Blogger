@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Heart, Share2, Copy, Twitter, Facebook, Instagram } from 'lucide-react'
+import { Button, ButtonGroup } from 'react-bootstrap'
 
 interface SocialShareProps {
   title: string
@@ -46,50 +47,51 @@ const SocialShare: React.FC<SocialShareProps> = ({ title, url, onLike, likes, is
   }
 
   return (
-    <div className="social-share">
-      <button 
-        className={`like-button ${isLiked ? 'liked' : ''}`}
+    <div className="social-share d-flex justify-content-between align-items-center">
+      <Button 
+        variant={isLiked ? 'primary' : 'outline-primary'}
         onClick={onLike}
         aria-label="Like post"
+        className="d-flex align-items-center gap-2"
       >
-        <Heart className="heart-icon" />
-        <span className="like-count">{likes}</span>
-      </button>
+        <Heart className={isLiked ? 'text-white' : ''} />
+        <span>{likes}</span>
+      </Button>
 
-      <div className="share-buttons">
-        <button
-          className="share-button"
+      <ButtonGroup>
+        <Button
+          variant="outline-secondary"
           onClick={() => handleShare('twitter')}
           aria-label="Share on Twitter"
         >
           <Twitter size={20} />
-        </button>
-        <button
-          className="share-button"
+        </Button>
+        <Button
+          variant="outline-secondary"
           onClick={() => handleShare('facebook')}
           aria-label="Share on Facebook"
         >
           <Facebook size={20} />
-        </button>
-          <button
-            className="share-button"
-            onClick={() => handleShare('instagram')}
-            aria-label="Share on Instagram"
-          >
-            <Instagram size={20} />
-          </button>
-        <button
-          className="share-button"
+        </Button>
+        <Button
+          variant="outline-secondary"
+          onClick={() => handleShare('instagram')}
+          aria-label="Share on Instagram"
+        >
+          <Instagram size={20} />
+        </Button>
+        <Button
+          variant="outline-secondary"
           onClick={() => handleShare('copy')}
           aria-label="Copy link"
         >
           {showCopySuccess ? (
-            <span className="copy-success">Copied!</span>
+            <span className="text-success">Copied!</span>
           ) : (
             <Copy size={20} />
           )}
-        </button>
-      </div>
+        </Button>
+      </ButtonGroup>
     </div>
   )
 }

@@ -1,5 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
+import { Container, Alert } from 'react-bootstrap';
 import YAML from "yaml";
 import BlogPost from "../components/BlogPost";
 
@@ -30,23 +31,25 @@ export default function Post() {
 
   if (!post) {
     return (
-      <main style={{ maxWidth: 760, margin: "40px auto", padding: "0 16px" }}>
-        <h1>Not found</h1>
-        <p>We couldn't find that post.</p>
-      </main>
+      <Container fluid="md" className="my-4">
+        <Alert variant="danger">
+          <Alert.Heading>Not found</Alert.Heading>
+          <p className="mb-0">We couldn't find that post.</p>
+        </Alert>
+      </Container>
     );
   }
 
   const { content, frontmatter } = post;
 
   return (
-    <main style={{ maxWidth: 760, margin: "40px auto", padding: "0 16px" }}>
+    <Container fluid="md" className="my-4">
       <BlogPost
         title={frontmatter.title || "Untitled Post"}
         content={content}
         date={frontmatter.date || new Date().toLocaleDateString()}
         slug={slug || ""}
       />
-    </main>
+    </Container>
   );
 }

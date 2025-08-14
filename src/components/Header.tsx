@@ -3,84 +3,57 @@ import { PenTool, Home, ShoppingBag, Shield, Award, UserCircle } from 'lucide-re
 import { features } from '../config/features'
 import { useAuth } from '../contexts/AuthContext'
 import { UserMenu } from './auth/UserMenu'
+import { Navbar, Nav, Container } from 'react-bootstrap'
 
 const Header = () => {
   const { user } = useAuth()
   const navigate = useNavigate()
 
   return (
-    <header className="header">
-      <div className="container">
-        <nav className="nav">
-          <h1>
-            <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-              That Labubu Life
-            </Link>
-          </h1>
-          <ul className="nav-links">
-            <li>
-              <Link to="/">
-                <Home size={18} />
-                Home
-              </Link>
-            </li>
+    <Navbar expand="lg" className="header" fixed="top" style={{ height: 'var(--header-height)' }}>
+      <Container>
+        <Navbar.Brand as={Link} to="/" className="brand-text">
+          ThatLabubuLife
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="ms-auto">
+            <Nav.Link as={Link} to="/" className="d-flex align-items-center gap-2">
+              <Home size={18} />
+              Home
+            </Nav.Link>
             {features.enableCreatePost && (
-              <li>
-                <Link to="/create">
-                  <PenTool size={18} />
-                  Create Post
-                </Link>
-              </li>
+              <Nav.Link as={Link} to="/create" className="d-flex align-items-center gap-2">
+                <PenTool size={18} />
+                Create Post
+              </Nav.Link>
             )}
             {features.enableProducts && (
-              <li>
-                <Link to="/products">
-                  <ShoppingBag size={18} />
-                  Products
-                </Link>
-              </li>
+              <Nav.Link as={Link} to="/products" className="d-flex align-items-center gap-2">
+                <ShoppingBag size={18} />
+                Products
+              </Nav.Link>
             )}
-            {/* <li>
-              <Link to="/community">
-                Community
-              </Link>
-            </li> */}
-            <li>
-              <Link to="/authenticity-verification">
-                <Shield size={18} />
-                Authenticity & Verification
-              </Link>
-            </li>
-           
-            <li>
-              <Link to="/about">
-                <UserCircle size={18} />
-                About
-              </Link>
-            </li>
-            <li>
-              <Link to="/contact">
-                <PenTool size={18} />
-                Contact
-              </Link>
-            </li>
-            {/* <li>
-              {user ? (
-                <UserMenu />
-              ) : (
-                <button
-                  onClick={() => navigate('/auth')}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors"
-                >
-                  <UserCircle size={18} />
-                  Sign In
-                </button>
-              )}
-            </li> */}
-          </ul>
-        </nav>
-      </div>
-    </header>
+            <Nav.Link as={Link} to="/authenticity-verification" className="d-flex align-items-center gap-2">
+              <Shield size={18} />
+              Authenticity & Verification
+            </Nav.Link>
+            {/* <Nav.Link as={Link} to="/certified-labubu" className="d-flex align-items-center gap-2">
+              <Award size={18} />
+              Certified Labubu
+            </Nav.Link> */}
+            <Nav.Link as={Link} to="/about" className="d-flex align-items-center gap-2">
+              <UserCircle size={18} />
+              About
+            </Nav.Link>
+            <Nav.Link as={Link} to="/contact" className="d-flex align-items-center gap-2">
+              <PenTool size={18} />
+              Contact
+            </Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   )
 }
 
