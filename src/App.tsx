@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Community from './pages/Community';
 import AuthenticityVerification from './pages/AuthenticityVerification';
+import CertifiedLabubu from './pages/CertifiedLabubu';
 import Auth from './pages/Auth';
 import Header from './components/Header'
 import BlogList from './components/BlogList'
@@ -44,6 +45,7 @@ function App() {
                 )}
                 <Route path="/community" element={<Home />} />
                 <Route path="/authenticity-verification" element={<AuthenticityVerification />} />
+                <Route path="/certified-labubu" element={<CertifiedLabubu />} />
                 <Route path="/auth" element={<Home />} />
                 <Route path="/:slug" element={<Post />} />
               </Routes>
