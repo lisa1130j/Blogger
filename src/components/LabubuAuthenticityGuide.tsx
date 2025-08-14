@@ -264,11 +264,6 @@ export default function LabubuAuthenticityGuide({
             </div>
           </section>
       </div>
-
-      {/* Right Column Ad */}
-      <div className="lg:sticky lg:top-4 lg:h-fit">
-        <AdPlaceholder format="sidebar" />
-      </div>
     </div>
   );
 }
