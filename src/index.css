@@ -344,7 +344,25 @@ button:focus-visible {
   backdrop-filter: blur(10px);
   transition: all var(--transition-normal);
   animation: headerGlow 4s ease-in-out infinite;
-  padding: 1rem 0;
+  min-height: var(--header-height);
+}
+
+@media (max-width: 991px) {
+  .header {
+    min-height: calc(var(--header-height) - 10px);
+  }
+  
+  .header .navbar-collapse {
+    background: inherit;
+    backdrop-filter: inherit;
+    margin: 0 -1rem;
+    padding: 0.5rem 1rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .header .nav-link {
+    font-size: 0.95rem;
+  }
 }
 
 @keyframes headerGlow {
@@ -1088,8 +1106,26 @@ main {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  :root {
+    --header-height: 60px;
+  }
+
   .container {
     padding: 0 var(--spacing-md);
+  }
+
+  main {
+    margin-top: var(--header-height);
+  }
+
+  .blog-posts .card {
+    margin-left: -1rem;
+    margin-right: -1rem;
+    border-radius: 0;
+  }
+
+  .blog-posts .card-body {
+    padding: var(--spacing-md);
   }
   
   .nav {
@@ -1126,7 +1162,15 @@ main {
 
 @media (max-width: 480px) {
   main {
-    padding: var(--spacing-lg) 0;
+    padding: var(--spacing-md) 0;
+  }
+
+  .blog-posts .card-title {
+    font-size: var(--font-size-lg);
+  }
+
+  .blog-posts .card-text {
+    font-size: var(--font-size-base);
   }
   
   .blog-post {

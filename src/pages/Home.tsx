@@ -31,7 +31,7 @@ const items: Item[] = Object.entries(rawPosts)
 
 export default function Home() {
   return (
-    <Container style={{ maxWidth: '1400px' }}>
+    <Container className="px-3 px-sm-4" style={{ maxWidth: '1400px' }}>
       {/* Top Banner Ad */}
       <div className="d-flex justify-content-center mb-4">
         <AdPlaceholder format="banner" />
@@ -41,9 +41,9 @@ export default function Home() {
       <Row className="g-4">
         <Col lg={9}>
           {/* Hero Section */}
-          <div className="mb-5">
+          <div className="mb-4 mb-lg-5">
             <h1 
-              className="display-4 fw-bold mb-3"
+              className="display-5 display-lg-4 fw-bold mb-3"
               style={{
                 background: "linear-gradient(135deg, var(--bs-primary), var(--bs-info), var(--bs-secondary))",
                 WebkitBackgroundClip: "text",
@@ -56,7 +56,7 @@ export default function Home() {
             <p className="lead mb-5">
               New to Labubu or a lifelong fan? Welcome to the burrow — where curiosity meets chaos and every ear tells a story.
             </p>
-            <Row className="align-items-center bg-light p-4 rounded mb-5">
+            <Row className="align-items-center bg-light p-3 p-sm-4 rounded mb-4 mb-lg-5">
               <Col md={8}>
                 <h2 className="h4 mb-3">Verify Your Labubu</h2>
                 <p className="mb-3">Ensure your Labubu is authentic by checking its verification code on PopMart's official site.</p>
@@ -101,8 +101,8 @@ export default function Home() {
                     href={`/${p.slug}`} 
                     className="text-decoration-none"
                   >
-                    <Card.Title 
-                      className="h4 mb-3"
+                <Card.Title 
+                  className="h5 h4-lg mb-2 mb-lg-3"
                       style={{
                         background: "linear-gradient(135deg, var(--bs-primary), var(--bs-info))",
                         WebkitBackgroundClip: "text",
@@ -117,11 +117,11 @@ export default function Home() {
                     </Card.Title>
                   </a>
                   {p.description && (
-                    <Card.Text className="text-muted mb-3 lead">
+                    <Card.Text className="text-muted mb-2 mb-lg-3">
                       {p.description}
                     </Card.Text>
                   )}
-                  <div className="d-flex align-items-center gap-3">
+                  <div className="d-flex flex-wrap align-items-center gap-2 gap-sm-3">
                     {p.date && (
                       <small className="text-muted d-flex align-items-center gap-1">
                         <i className="bi bi-calendar3"></i>
