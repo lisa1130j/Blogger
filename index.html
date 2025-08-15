@@ -2,7 +2,21 @@
 <html lang="en">
   <head>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1582697443657739"
-     crossorigin="anonymous"></script>
+     crossorigin="anonymous">
+    /* Force light theme only for users whose system prefers dark */
+    </script>
+      <!-- Force light theme only for users whose system prefers dark -->
+    <script>
+      (function () {
+        if (window.matchMedia?.('(prefers-color-scheme: dark)').matches) {
+          const d = document.documentElement;
+          d.classList.remove('dark');          // remove Tailwind dark mode if present
+          d.style.colorScheme = 'light';       // native scrollbars, form controls stay light
+          d.setAttribute('data-forced-light', '1');
+          try { sessionStorage.setItem('forced-light', '1'); } catch (_) {}
+        }
+      })();
+    </script>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/src/posts/images/favicon.png" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">

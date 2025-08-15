@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Container, Row, Col, Image, Button, Card } from 'react-bootstrap';
+import { useLocation } from 'react-router-dom';
 import YAML from "yaml";
 import AdPlaceholder from '../components/AdPlaceholder';
 
@@ -30,6 +31,28 @@ const items: Item[] = Object.entries(rawPosts)
   .sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")));
 
 export default function Home() {
+  const location = useLocation();
+
+  // Save scroll position before navigating away
+  useEffect(() => {
+    const handleScroll = () => {
+      sessionStorage.setItem('scrollPosition', window.scrollY.toString());
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Restore scroll position when returning from a blog post
+  useEffect(() => {
+    const scrollPosition = location.state?.scrollPosition;
+    if (scrollPosition) {
+      window.scrollTo({
+        top: scrollPosition,
+        behavior: 'instant'
+      });
+    }
+  }, [location]);
+
   return (
     <Container className="px-3 px-sm-4" style={{ maxWidth: '1400px' }}>
       {/* Top Banner Ad */}
@@ -42,15 +65,7 @@ export default function Home() {
         <Col lg={9}>
           {/* Hero Section */}
           <div className="mb-4 mb-lg-5">
-            <h1 
-              className="display-5 display-lg-4 fw-bold mb-3"
-              style={{
-                background: "linear-gradient(135deg, var(--bs-primary), var(--bs-info), var(--bs-secondary))",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text"
-              }}
-            >
+            <h1 className="brand-text display-5 display-lg-4 mb-3">
               That Labubu Life
             </h1>
             <p className="lead mb-5">
@@ -58,7 +73,19 @@ export default function Home() {
             </p>
             <Row className="align-items-center bg-light p-3 p-sm-4 rounded mb-4 mb-lg-5">
               <Col md={8}>
-                <h2 className="h4 mb-3">Verify Your Labubu</h2>
+                <h2 
+                  className="h4 mb-3"
+                  style={{
+                    background: "linear-gradient(135deg, var(--color-primary), var(--color-accent-2))",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                    letterSpacing: "var(--letter-spacing-tight)",
+                    fontWeight: 800
+                  }}
+                >
+                  Verify Your Labubu
+                </h2>
                 <p className="mb-3">Ensure your Labubu is authentic by checking its verification code on PopMart's official site.</p>
                 <Button
                   href="https://www.popmart.com/us/help/authenticity-check"
@@ -66,7 +93,7 @@ export default function Home() {
                   rel="noopener noreferrer"
                   variant="primary"
                   style={{
-                    background: "linear-gradient(90deg, var(--bs-primary), var(--bs-info))",
+                    background: "linear-gradient(90deg, var(--color-primary), var(--color-accent-2))",
                     border: "none"
                   }}
                 >
@@ -104,7 +131,9 @@ export default function Home() {
                 <Card.Title 
                   className="h5 h4-lg mb-2 mb-lg-3"
                       style={{
-                        background: "linear-gradient(135deg, var(--bs-primary), var(--bs-info))",
+                        background: index % 2 === 0 
+                          ? "linear-gradient(135deg, var(--bs-primary), var(--bs-info))"
+                          : "linear-gradient(135deg, var(--color-secondary), var(--color-accent))",
                         WebkitBackgroundClip: "text",
                         WebkitTextFillColor: "transparent",
                         backgroundClip: "text",

@@ -22,11 +22,24 @@ const CreatePost = ({ onAddPost }: CreatePostProps) => {
       return
     }
 
+    const trimmedTitle = title.trim();
+    const trimmedContent = content.trim();
+    const trimmedAuthor = author.trim();
+    const trimmedExcerpt = excerpt.trim() || content.substring(0, 150) + '...';
+    
+    // Generate slug from title
+    const slug = trimmedTitle
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
+
     onAddPost({
-      title: title.trim(),
-      content: content.trim(),
-      author: author.trim(),
-      excerpt: excerpt.trim() || content.substring(0, 150) + '...'
+      title: trimmedTitle,
+      content: trimmedContent,
+      author: trimmedAuthor,
+      excerpt: trimmedExcerpt,
+      description: trimmedExcerpt, // Use excerpt as description
+      slug
     })
 
     navigate('/')

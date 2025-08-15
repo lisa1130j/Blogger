@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { BlogPostType } from '../types/BlogPost'
 import { ArrowLeft, Calendar, Clock } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
@@ -22,6 +22,7 @@ interface BlogPostProps {
 }
 
 const BlogPost: React.FC<BlogPostProps> = ({ title, content, date, slug }) => {
+  const navigate = useNavigate()
   const [likes, setLikes] = useState(0)
   const [isLiked, setIsLiked] = useState(false)
 
@@ -51,12 +52,17 @@ const BlogPost: React.FC<BlogPostProps> = ({ title, content, date, slug }) => {
   return (
     <Container fluid="md">
       <div className="mb-4">
-        <Link to="/">
-          <Button variant="link" className="d-flex align-items-center gap-2 p-0">
-            <ArrowLeft size={18} />
-            Back to Posts
-          </Button>
-        </Link>
+        <Button 
+          variant="link" 
+          className="d-flex align-items-center gap-2 p-0"
+          onClick={() => {
+            const scrollPosition = sessionStorage.getItem('scrollPosition');
+            navigate('/', { state: { scrollPosition: scrollPosition ? parseInt(scrollPosition) : 0 } });
+          }}
+        >
+          <ArrowLeft size={18} />
+          Back to Posts
+        </Button>
       </div>
       
       <Card className="blog-post shadow-sm border-0">
