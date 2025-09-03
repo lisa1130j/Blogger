@@ -5,6 +5,7 @@ import { ArrowLeft, Calendar, Clock } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import SocialShare from './SocialShare'
+import { adjustLikes, getLikes } from '../services/likesService'
 import { Container, Card, Button } from 'react-bootstrap'
 
 // Calculate reading time
@@ -27,26 +28,35 @@ const BlogPost: React.FC<BlogPostProps> = ({ title, content, date, slug }) => {
   const [isLiked, setIsLiked] = useState(false)
 
   useEffect(() => {
-    // Load likes from localStorage
-    const storedLikes = localStorage.getItem(`blog-likes-${slug}`)
-    const userLiked = localStorage.getItem(`blog-liked-${slug}`)
-    if (storedLikes) {
-      setLikes(parseInt(storedLikes))
-    }
-    if (userLiked) {
-      setIsLiked(true)
-    }
+    let active = true
+    ;(async () => {
+      try {
+        const remoteLikes = await getLikes(slug)
+        if (active) setLikes(remoteLikes)
+      } catch (e) {
+        console.error('Failed to load likes', e)
+      }
+      // keep per-user liked flag local only
+      const userLiked = localStorage.getItem(`blog-liked-${slug}`)
+      if (userLiked && active) setIsLiked(true)
+    })()
+    return () => { active = false }
   }, [slug])
 
-  const handleLike = () => {
+  const handleLike = async () => {
     const newLikeState = !isLiked
-    const newLikes = newLikeState ? likes + 1 : likes - 1
-    
     setIsLiked(newLikeState)
-    setLikes(newLikes)
-    
-    localStorage.setItem(`blog-likes-${slug}`, newLikes.toString())
-    localStorage.setItem(`blog-liked-${slug}`, newLikeState ? 'true' : '')
+    try {
+      const delta = newLikeState ? 1 : -1
+      const updated = await adjustLikes(slug, delta)
+      setLikes(updated)
+      if (newLikeState) localStorage.setItem(`blog-liked-${slug}`, 'true')
+      else localStorage.removeItem(`blog-liked-${slug}`)
+    } catch (e) {
+      console.error('Failed to update like', e)
+      // revert optimistic toggle on error
+      setIsLiked(!newLikeState)
+    }
   }
   
   return (

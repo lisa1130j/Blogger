@@ -27,6 +27,12 @@ export interface Topic {
   posts?: Post[]
 }
 
+export interface BlogLike {
+  slug: string
+  likes: number
+  updated_at: string
+}
+
 export interface Database {
   public: {
     Tables: {
@@ -44,6 +50,11 @@ export interface Database {
         Row: Reply
         Insert: Omit<Reply, 'id' | 'created_at'>
         Update: Partial<Omit<Reply, 'id' | 'created_at'>>
+      }
+      blog_likes: {
+        Row: BlogLike
+        Insert: Omit<BlogLike, 'updated_at'>
+        Update: Partial<Omit<BlogLike, 'slug' | 'updated_at'>>
       }
     }
   }

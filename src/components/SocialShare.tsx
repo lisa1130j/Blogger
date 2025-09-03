@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Heart, Share2, Copy, Twitter, Facebook, Instagram } from 'lucide-react'
+import { Heart, Copy, Twitter, Facebook, Instagram } from 'lucide-react'
 import { Button, ButtonGroup } from 'react-bootstrap'
 
 interface SocialShareProps {
@@ -16,7 +16,7 @@ const SocialShare: React.FC<SocialShareProps> = ({ title, url, onLike, likes, is
   const handleShare = async (platform: string) => {
     const shareUrl = encodeURIComponent(url)
     const shareTitle = encodeURIComponent(title)
-    
+
     let shareLink = ''
     switch (platform) {
       case 'twitter':
@@ -26,7 +26,6 @@ const SocialShare: React.FC<SocialShareProps> = ({ title, url, onLike, likes, is
         shareLink = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`
         break
       case 'instagram':
-        // Since Instagram doesn't have a direct share URL, we'll open Instagram's home page
         shareLink = 'https://www.instagram.com'
         break
       case 'copy':
@@ -35,61 +34,45 @@ const SocialShare: React.FC<SocialShareProps> = ({ title, url, onLike, likes, is
           setShowCopySuccess(true)
           setTimeout(() => setShowCopySuccess(false), 2000)
           return
-        } catch (err) {
-          console.error('Failed to copy:', err)
+        } catch {
+          // no-op
         }
         break
     }
-
-    if (shareLink) {
-      window.open(shareLink, '_blank', 'noopener,noreferrer')
-    }
+    if (shareLink) window.open(shareLink, '_blank', 'noopener,noreferrer')
   }
 
   return (
-    <div className="social-share d-flex justify-content-between align-items-center">
-      <Button 
-        variant={isLiked ? 'primary' : 'outline-primary'}
+    <div className="social-share">
+      {/* Use custom styled button so .like-button/.liked CSS applies */}
+      <button
+        type="button"
+        aria-pressed={isLiked}
+        aria-label={isLiked ? 'Unlike' : 'Like'}
+        className={`like-button ${isLiked ? 'liked' : ''}`}
         onClick={onLike}
-        aria-label="Like post"
-        className="d-flex align-items-center gap-2"
       >
-        <Heart className={isLiked ? 'text-white' : ''} />
-        <span>{likes}</span>
-      </Button>
+        <Heart
+          className="heart-icon"
+          size={18}
+          strokeWidth={2}
+          fill={isLiked ? 'currentColor' : 'none'}
+        />
+        <span className="like-count">{likes}</span>
+      </button>
 
       <ButtonGroup>
-        <Button
-          variant="outline-secondary"
-          onClick={() => handleShare('twitter')}
-          aria-label="Share on Twitter"
-        >
+        <Button variant="outline-secondary" onClick={() => handleShare('twitter')} aria-label="Share on X/Twitter">
           <Twitter size={20} />
         </Button>
-        <Button
-          variant="outline-secondary"
-          onClick={() => handleShare('facebook')}
-          aria-label="Share on Facebook"
-        >
+        <Button variant="outline-secondary" onClick={() => handleShare('facebook')} aria-label="Share on Facebook">
           <Facebook size={20} />
         </Button>
-        <Button
-          variant="outline-secondary"
-          onClick={() => handleShare('instagram')}
-          aria-label="Share on Instagram"
-        >
+        <Button variant="outline-secondary" onClick={() => handleShare('instagram')} aria-label="Share on Instagram">
           <Instagram size={20} />
         </Button>
-        <Button
-          variant="outline-secondary"
-          onClick={() => handleShare('copy')}
-          aria-label="Copy link"
-        >
-          {showCopySuccess ? (
-            <span className="text-success">Copied!</span>
-          ) : (
-            <Copy size={20} />
-          )}
+        <Button variant="outline-secondary" onClick={() => handleShare('copy')} aria-label="Copy link">
+          {showCopySuccess ? <span className="text-success">Copied!</span> : <Copy size={20} />}
         </Button>
       </ButtonGroup>
     </div>

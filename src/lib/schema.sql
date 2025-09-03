@@ -104,3 +104,38 @@ insert into topics (title, description) values
   ('General', 'Talk about anything related to the community.'),
   ('Finding Labubu', 'Share and find Labubu in your area!'),
   ('Labubu Hangouts', 'Share photos and stories of hanging out with your Labubu!');
+
+-- Persistent likes for markdown blog posts
+create table if not exists blog_likes (
+  slug text primary key,
+  likes integer not null default 0,
+  updated_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+alter table blog_likes enable row level security;
+
+-- Public read and simple write for this demo site (adjust to your needs)
+drop policy if exists "Allow public read access to blog_likes" on blog_likes;
+create policy "Allow public read access to blog_likes"
+  on blog_likes for select to anon using (true);
+
+drop policy if exists "Allow public insert to blog_likes" on blog_likes;
+create policy "Allow public insert to blog_likes"
+  on blog_likes for insert to anon with check (true);
+
+drop policy if exists "Allow public update to blog_likes" on blog_likes;
+create policy "Allow public update to blog_likes"
+  on blog_likes for update to anon using (true) with check (true);
+
+-- Safe atomic adjust via RPC
+create or replace function adjust_blog_likes(p_slug text, p_delta int)
+returns int
+language sql
+security definer
+as $$
+  insert into blog_likes (slug, likes)
+  values (p_slug, greatest(0, p_delta))
+  on conflict (slug)
+  do update set likes = greatest(0, blog_likes.likes + p_delta), updated_at = timezone('utc'::text, now())
+  returning likes;
+$$;
