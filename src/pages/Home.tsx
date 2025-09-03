@@ -3,10 +3,11 @@ import { Container, Row, Col, Image, Button, Card } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom';
 import YAML from "yaml";
 import AdPlaceholder from '../components/AdPlaceholder';
+import { readingTimeLabel } from '../utils/readingTime';
 
 const rawPosts = import.meta.glob("../posts/*.md", { as: "raw", eager: true }) as Record<string, string>;
 
-type Item = { slug: string; title: string; date?: string; description?: string };
+type Item = { slug: string; title: string; date?: string; description?: string; readTime: string };
 
 function parseFrontmatter(raw: string) {
   if (!raw.startsWith("---")) return { content: raw, fm: {} as Record<string, unknown> };
@@ -20,12 +21,13 @@ function parseFrontmatter(raw: string) {
 const items: Item[] = Object.entries(rawPosts)
   .map(([path, raw]) => {
     const slug = path.split("/").pop()!.replace(".md", "");
-    const { fm } = parseFrontmatter(raw);
+    const { fm, content } = parseFrontmatter(raw);
     return {
       slug,
       title: String((fm as any).title ?? slug),
       date: (fm as any).date as string | undefined,
       description: (fm as any).description as string | undefined,
+      readTime: readingTimeLabel(content)
     };
   })
   .sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")));
@@ -159,7 +161,7 @@ export default function Home() {
                     )}
                     <small className="text-muted d-flex align-items-center gap-1">
                       <i className="bi bi-clock"></i>
-                      {Math.ceil(p.description?.length || 0 / 200)} min read
+                      {p.readTime}
                     </small>
                   </div>
                 </Card.Body>

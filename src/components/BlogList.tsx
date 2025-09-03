@@ -4,13 +4,7 @@ import { BlogPostType } from '../types/BlogPost'
 import { Calendar, ArrowRight, PenTool, Clock } from 'lucide-react'
 import { getAllPosts } from '../utils/markdown'
 import { Container, Row, Col, Card, Button } from 'react-bootstrap'
-
-// Calculate reading time
-const calculateReadingTime = (content: string): number => {
-  const wordsPerMinute = 200;
-  const words = content.trim().split(/\s+/).length;
-  return Math.ceil(words / wordsPerMinute);
-}
+import { readingTimeLabel } from '../utils/readingTime'
 
 const BlogList: React.FC = () => {
   const [posts, setPosts] = React.useState<BlogPostType[]>([])
@@ -67,7 +61,7 @@ const BlogList: React.FC = () => {
                           </span>
                           <span className="meta-item">
                             <Clock size={14} />
-                            {calculateReadingTime(post.content)} min read
+                            {readingTimeLabel(post.content)}
                           </span>
                         </div>
                       </div>

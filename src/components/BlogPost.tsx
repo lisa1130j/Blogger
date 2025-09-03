@@ -7,13 +7,7 @@ import remarkGfm from 'remark-gfm'
 import SocialShare from './SocialShare'
 import { adjustLikes, getLikes } from '../services/likesService'
 import { Container, Card, Button } from 'react-bootstrap'
-
-// Calculate reading time
-const calculateReadingTime = (content: string): number => {
-  const wordsPerMinute = 200;
-  const words = content.trim().split(/\s+/).length;
-  return Math.ceil(words / wordsPerMinute);
-}
+import { readingTimeLabel } from '../utils/readingTime'
 
 interface BlogPostProps {
   title: string
@@ -87,7 +81,7 @@ const BlogPost: React.FC<BlogPostProps> = ({ title, content, date, slug }) => {
               </span>
               <span className="d-flex align-items-center gap-2 text-muted">
                 <Clock size={16} />
-                {calculateReadingTime(content)} min read
+                {readingTimeLabel(content)}
               </span>
             </div>
           </div>
