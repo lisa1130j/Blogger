@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom'
-import { PenTool, Home, ShoppingBag, Shield, Award, UserCircle } from 'lucide-react'
+import { Home, FilePlus, Store, ShieldCheck, Info, Mail } from 'lucide-react'
 import { features } from '../config/features'
 import { useAuth } from '../contexts/AuthContext'
 import { UserMenu } from './auth/UserMenu'
@@ -29,18 +29,18 @@ const Header = () => {
             </Nav.Link>
             {features.enableCreatePost && (
               <Nav.Link as={Link} to="/create" className="d-flex align-items-center gap-2 py-2 py-lg-3">
-                <PenTool size={18} />
+                <FilePlus size={18} />
                 Create Post
               </Nav.Link>
             )}
             {features.enableProducts && (
               <Nav.Link as={Link} to="/products" className="d-flex align-items-center gap-2 py-2 py-lg-3">
-                <ShoppingBag size={18} />
+                <Store size={18} />
                 Products
               </Nav.Link>
             )}
             <Nav.Link as={Link} to="/authenticity-verification" className="d-flex align-items-center gap-2 py-2 py-lg-3">
-              <Shield size={18} />
+              <ShieldCheck size={18} />
               Authenticity & Verification
             </Nav.Link>
             {/* <Nav.Link as={Link} to="/certified-labubu" className="d-flex align-items-center gap-2">
@@ -48,11 +48,11 @@ const Header = () => {
               Certified Labubu
             </Nav.Link> */}
             <Nav.Link as={Link} to="/about" className="d-flex align-items-center gap-2 py-2 py-lg-3">
-              <UserCircle size={18} />
+              <Info size={18} />
               About
             </Nav.Link>
             <Nav.Link as={Link} to="/contact" className="d-flex align-items-center gap-2 py-2 py-lg-3">
-              <PenTool size={18} />
+              <Mail size={18} />
               Contact
             </Nav.Link>
           </Nav>
