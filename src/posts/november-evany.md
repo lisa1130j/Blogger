@@ -9,7 +9,7 @@ tags: [labubu, popmart, mini-labubu, november, collectibles, toy-news, early-nov
 
 Before diving into today’s early-November Labubu roundup, I want to start with something close to my heart —  
 **it was my little one’s birthday today. Happy Birthday, Evany!** 🎉💖  
-Thank you for all filling my life with so much joy and the best kind of chaos. 💛
+Thank you for filling my life with so much joy and the best kind of chaos. 💛
 
 Now, let’s jump into what the Labubu community has been buzzing about at the start of this month.
 
