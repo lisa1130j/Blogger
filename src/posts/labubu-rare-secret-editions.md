@@ -66,5 +66,4 @@ Whether you’re a long-term collector or just getting started, rare and secret 
 
 And today’s post feels extra special, because rare treasures remind me of the joy and brightness brought into my life daily by someone even more precious.
 
-**Happy Birthday to my beautiful Lindsey!** 🎂💛  
-Thank you for
+**Happy Birthday to my beautiful Lindsey!** 🎂💛
